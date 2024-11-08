@@ -31,7 +31,7 @@ A C++ implementation of the 2048 game.
    ```
 3. Compile:
    ```sh
-   g++ -o 2048 main.cpp
+   make 2048
    ```
 
 ## Usage
