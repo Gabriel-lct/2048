@@ -1,0 +1,17 @@
+# Nom de l'exécutable final
+TARGET = 2048
+
+# Les fichiers sources
+SRC = ./src/main.cpp ./src/Display.cpp ./src/Utils.cpp
+
+# Le compilateur et les options
+CXX = g++
+CXXFLAGS = -std=c++17 -Wall
+
+# Règle pour compiler le programme
+$(TARGET): $(SRC)
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(SRC)
+
+# Nettoyer les fichiers générés
+clean:
+	rm -f $(TARGET)
