@@ -4,6 +4,17 @@
 #include <string>
 #include <iostream>
 
+std::map<char, int> MODE = EN;
+
+/**
+ * @brief Spawns a new tile on the board.
+ *
+ * This function sets a random tile on the board
+ * to a random integer, either 2 (90%) or 4 (10%)
+ * 
+ * @param plateau The 2D vector containing integer elements.
+ */
+
 void spawn(Plateau &plateau){
     int x, y, v;
     int N = plateau.size();
@@ -12,9 +23,25 @@ void spawn(Plateau &plateau){
         x = rand() % N;
         y = rand() % M;
     }while (plateau[x][y] != 0);
-    v = ((rand() % 2) + 1) * 2;
+    int prob = rand() % 10;
+    if (prob < 9){
+        v = 2;
+    } else{
+        v = 4;
+    }
     plateau[x][y] = v;
 }
+
+/**
+ * @brief Generates a new board.
+ *
+ * This function generates a new NxM board, empty except 
+ * for two tiles, filled with either 2 or 4.
+ *
+ * @param N The number of rows.
+ * @param M The number of columns.
+ * @return Plateau The generated board.
+ */
 
 Plateau genPlateau(int N, int M){
     Plateau p(N, std::vector<int>(M, 0));
@@ -25,20 +52,32 @@ Plateau genPlateau(int N, int M){
     return p;
 }
 
+/**
+ * @brief Takes input from the player.
+ *
+ * This function takes a command from the player and assings an integer value,
+ * this 
+ *
+ * @param board The 2D vector containing integer elements.
+ * @return int The largest element in the board.
+ */
+
 int takeInput(){
-    std::string i;
+    char i;
     std::cout << "Entrer commande: ";
     std::cin >> i;
     std::cout << std::endl;
-    if (i == "u"){
-        return 0;
-    } else if (i == "d"){
-        return 1;
-    }else if (i == "l"){
-        return 2;
-    } else if (i == "r"){
-        return 3;
-    } return -1;
+    int dir;
+    try
+    {
+        dir = MODE.at(i);
+    }
+    catch(const std::exception& e)
+    {
+        return -1;
+    }
+    
+    return dir;
 }
 //NxM
 // 0: up, 1: down, 2: right, 3: left
