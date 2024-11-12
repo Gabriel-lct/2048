@@ -1,5 +1,5 @@
-#include "../include/Display.h"
-#include "../include/Utils.h"
+#include "./include/Display.h"
+#include "./include/Utils.h"
 #include <iostream>
 
 /**
