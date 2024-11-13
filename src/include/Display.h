@@ -4,6 +4,14 @@
 #include <vector>
 using std::vector;
 
-void displayBoard(vector<vector<int>>);
+using Board = std::vector<std::vector<int>>;
+
+void displayBoard(Board);
+
+class Display
+{
+public:
+    void drawGrid();
+};
 
 #endif

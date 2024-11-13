@@ -2,6 +2,7 @@
 #include "./include/Utils.h"
 #include <iostream>
 
+// Previous code.
 /**
  * @brief Creates a line of asterisks with specified number of cells and cell spacing.
  *

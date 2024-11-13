@@ -1,5 +1,6 @@
 #include "./include/Game.h"
 
+Board test_board = {{0, 0, 2, 0}, {4, 0, 16, 8}, {0, 0, 2, 0}, {4, 0, 16, 8}};
 Game::Game() {};
 
 Game::~Game() {};
@@ -25,7 +26,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
 
     std::cout << "Window created" << std::endl;
 
-    renderer = SDL_CreateRenderer(window, -1, 0);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
     if (!renderer)
     {
         std::cout << "Failed to create the renderer!" << std::endl;
@@ -74,7 +75,7 @@ void Game::update() {
 void Game::render()
 {
     SDL_RenderClear(renderer);
-
+    drawGrid(test_board);
     SDL_RenderPresent(renderer);
 }
 
@@ -91,6 +92,60 @@ void Game::clean()
 bool Game::running()
 {
     return isRunning;
+}
+
+void Game::drawGrid(Board board)
+{
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    int screenWidth, screenHeight;
+    SDL_GetRendererOutputSize(renderer, &screenWidth, &screenHeight);
+
+    int gridSize = 400;
+    int gridX = (screenWidth - gridSize) / 2;
+    int gridY = (screenHeight - gridSize) / 2;
+
+    SDL_Rect gridRect = {gridX, gridY, gridSize, gridSize};
+    SDL_RenderFillRect(renderer, &gridRect);
+
+    for (int row = 0; row < 4; ++row)
+    {
+        for (int col = 0; col < 4; ++col)
+        {
+            SDL_Rect tileRect = {gridX + col * 100 + 10, gridY + row * 100 + 10, 90, 90};
+            SDL_SetRenderDrawColor(renderer, 100, 200, 200, 255);
+            SDL_RenderFillRect(renderer, &tileRect);
+
+            int tileValue = board[row][col];
+
+            if (tileValue != 0)
+            {
+                std::string text = std::to_string(tileValue);
+
+                SDL_Color textColor = {0, 0, 0, 255};
+                SDL_Surface *textSurface = TTF_RenderText_Solid(font, text.c_str(), textColor);
+
+                if (textSurface)
+                {
+                    SDL_Texture *textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+                    SDL_FreeSurface(textSurface);
+
+                    if (textTexture)
+                    {
+                        int textWidth, textHeight;
+                        SDL_QueryTexture(textTexture, NULL, NULL, &textWidth, &textHeight);
+                        SDL_Rect textRect = {
+                            tileRect.x + (tileRect.w - textWidth) / 2,
+                            tileRect.y + (tileRect.h - textHeight) / 2,
+                            textWidth,
+                            textHeight};
+
+                        SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
+                        SDL_DestroyTexture(textTexture);
+                    }
+                }
+            }
+        }
+    }
 }
 
 /* Game Luca */

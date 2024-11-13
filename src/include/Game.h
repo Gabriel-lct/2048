@@ -10,6 +10,8 @@
 #include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 
+using Board = std::vector<std::vector<int>>;
+
 class Game
 {
 public:
@@ -22,6 +24,9 @@ public:
     void render();
     void clean();
     bool running();
+
+    Board initiadeGrid();
+    void drawGrid(Board);
 
 private:
     bool isRunning;

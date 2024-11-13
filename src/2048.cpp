@@ -9,27 +9,22 @@ Game *game = nullptr;
 
 int main(int argc, char const *argv[])
 {
-    // Set the frames per second
-    const int FPS = 20;
-    // Calculate the frame delay
+    const int FPS = 60;
     const int frameDelay = 1000 / FPS;
 
     Uint32 frameStart;
     int frameTime;
 
-    // Create a new game instance
     game = new Game();
 
-    // Initialize the game with a title, position, size, and fullscreen flag
+    // Initialize the game with a title, position, size, and fullscreen option
     game->init("2048 Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, false);
 
-    // Main game loop
     while (game->running())
     {
         // Initialize the Time before any instructions
         frameStart = SDL_GetTicks();
 
-        // Handle game events, updates, and rendering
         game->handleEvents();
         game->update();
         game->render();
