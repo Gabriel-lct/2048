@@ -37,3 +37,11 @@ int biggestElement(vector<vector<int>> board)
     }
     return biggest;
 }
+
+void clearConsole()
+{
+    if (system("clear"))
+    {
+        system("cls");
+    }
+}

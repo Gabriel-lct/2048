@@ -1,7 +1,10 @@
 #include "./include/Display.h"
 #include "./include/Game.h"
+#include "./include/Utils.h"
+
 
 #include <iostream>
+#include <stdlib.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
@@ -40,14 +43,17 @@ void run_GUI(){
 }
 
 void run_CLI(){
+    clearConsole();
     int N = 4;
     int M = 4;
+    int S = 0;
 
-    Plateau plateau = genPlateau(N, M);
+    Board board = genBoard(N, M);
 
     while (true)
     {
-        displayBoard(plateau);
+        std::cout << "SCORE: " << S << std::endl;
+        displayBoard(board);
         int dir = takeInput();
         if (dir == -1)
         {
@@ -55,7 +61,8 @@ void run_CLI(){
         }
         else
         {
-            slide(plateau, dir);
+            slide(board, dir, S);
+            clearConsole();
         }
     }
 }
@@ -63,12 +70,12 @@ void run_CLI(){
 int main(int argc, char const *argv[])
 {
 
-    int MODE;
+    int DISPLAY_MODE;
     std::cout << "Please select a Game Mode: GUI (1), CLI (2): ";
-    std::cin >> MODE;
-    if (MODE == 1){
+    std::cin >> DISPLAY_MODE;
+    if (DISPLAY_MODE == 1){
         run_GUI();
-    } else if (MODE == 2){
+    } else if (DISPLAY_MODE == 2){
         run_CLI();
     }
 

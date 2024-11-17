@@ -1,8 +1,10 @@
 #include "./include/Game.h"
+#include "./include/Utils.h"
 
 #include <cmath>
 #include <string>
 #include <iostream>
+#include <time.h>
 
 Board test_board = {{0, 0, 2, 0}, {4, 0, 16, 8}, {0, 0, 2, 0}, {4, 0, 16, 8}};
 Game::Game() {};
@@ -153,7 +155,7 @@ void Game::drawGrid(Board board)
 }
 
 /* Game Luca */
-std::map<char, int> MODE = EN;
+std::map<char, int> MODE = WASD;
 
 /**
  * @brief Spawns a new tile on the board.
@@ -161,19 +163,19 @@ std::map<char, int> MODE = EN;
  * This function sets a random tile on the board
  * to a random integer, either 2 (90%) or 4 (10%)
  *
- * @param plateau The 2D vector containing integer elements.
+ * @param board The 2D vector containing integer elements.
  */
 
-void spawn(Plateau &plateau)
+void spawn(Board &board)
 {
     int x, y, v;
-    int N = plateau.size();
-    int M = plateau[0].size();
+    int N = board.size();
+    int M = board[0].size();
     do
     {
         x = rand() % N;
         y = rand() % M;
-    } while (plateau[x][y] != 0);
+    } while (board[x][y] != 0);
     int prob = rand() % 10;
     if (prob < 9)
     {
@@ -183,7 +185,7 @@ void spawn(Plateau &plateau)
     {
         v = 4;
     }
-    plateau[x][y] = v;
+    board[x][y] = v;
 }
 
 /**
@@ -194,12 +196,13 @@ void spawn(Plateau &plateau)
  *
  * @param N The number of rows.
  * @param M The number of columns.
- * @return Plateau The generated board.
+ * @return Board The generated board.
  */
 
-Plateau genPlateau(int N, int M)
+Board genBoard(int N, int M)
 {
-    Plateau p(N, std::vector<int>(M, 0));
+    srand(time(NULL));
+    Board p(N, std::vector<int>(M, 0));
 
     spawn(p);
     spawn(p);
@@ -235,177 +238,210 @@ int takeInput()
 
     return dir;
 }
+
+
 // NxM
 //  0: up, 1: down, 2: right, 3: left
-void moveRight(Plateau &plateau)
+void moveRight(Board &board, int &c)
 {
-    int N = plateau.size();
-    int M = plateau[0].size();
+    int N = board.size();
+    int M = board[0].size();
     for (int y = 0; y < N; y++)
     {
         for (int i = M - 2; i >= 0; i--)
         {
             for (int j = i; j < M - 1; j++)
             {
-                if (plateau[y][j + 1] == 0)
+                if (board[y][j]==0){continue;}
+                if (board[y][j + 1] == 0)
                 {
-                    plateau[y][j + 1] = plateau[y][j];
-                    plateau[y][j] = 0;
+                    board[y][j + 1] = board[y][j];
+                    board[y][j] = 0;
+                    c++;
                 }
             }
         }
     }
 }
-void fuseRight(Plateau &plateau)
+void fuseRight(Board &board, int &c, int &s)
 {
-    int N = plateau.size();
-    int M = plateau[0].size();
+    int N = board.size();
+    int M = board[0].size();
+    int f;
     for (int y = 0; y < N; y++)
     {
         for (int i = M - 1; i > 0; i--)
         {
-            if (plateau[y][i - 1] == plateau[y][i])
+            f = board[y][i];
+            if (f==0){continue;}
+            if (board[y][i - 1] == f)
             {
-                plateau[y][i - 1] = 0;
-                plateau[y][i] = 2 * plateau[y][i];
+                board[y][i - 1] = 0;
+                board[y][i] = 2 * f;
+                c++;
+                s = s + 2*f;
             }
         }
     }
 }
 
-void moveLeft(Plateau &plateau)
+void moveLeft(Board &board, int &c)
 {
-    int N = plateau.size();
-    int M = plateau[0].size();
+    int N = board.size();
+    int M = board[0].size();
     for (int y = 0; y < N; y++)
     {
         for (int i = 0; i < M; i++)
         {
             for (int j = i; j > 0; j--)
             {
-                if (plateau[y][j - 1] == 0)
+                if (board[y][j]==0){continue;}
+                if (board[y][j - 1] == 0)
                 {
-                    plateau[y][j - 1] = plateau[y][j];
-                    plateau[y][j] = 0;
+                    board[y][j - 1] = board[y][j];
+                    board[y][j] = 0;
+                    c++;
                 }
             }
         }
     }
 }
-void fuseLeft(Plateau &plateau)
+void fuseLeft(Board &board, int &c, int &s)
 {
-    int N = plateau.size();
-    int M = plateau[0].size();
+    int N = board.size();
+    int M = board[0].size();
+    int f;
     for (int y = 0; y < N; y++)
     {
         for (int i = 0; i < M - 1; i++)
         {
-            if (plateau[y][i + 1] == plateau[y][i])
+            f = board[y][i];
+            if (f==0){continue;}
+            if (board[y][i + 1] == f)
             {
-                plateau[y][i + 1] = 0;
-                plateau[y][i] = 2 * plateau[y][i];
+                board[y][i + 1] = 0;
+                board[y][i] = 2 * f;
+                c++;
+                s = s + 2*f;
             }
         }
     }
 }
 
-void moveUp(Plateau &plateau)
+void moveUp(Board &board, int &c)
 {
-    int N = plateau.size();
-    int M = plateau[0].size();
+    int N = board.size();
+    int M = board[0].size();
     for (int y = 0; y < M; y++)
     {
         for (int i = 0; i < N; i++)
         {
             for (int j = i; j > 0; j--)
             {
-                if (plateau[j - 1][y] == 0)
+                if (board[j][y]==0){continue;}
+                if (board[j - 1][y] == 0)
                 {
-                    plateau[j - 1][y] = plateau[j][y];
-                    plateau[j][y] = 0;
+                    board[j - 1][y] = board[j][y];
+                    board[j][y] = 0;
+                    c++;
                 }
             }
         }
     }
 }
-void fuseUp(Plateau &plateau)
+void fuseUp(Board &board, int &c, int &s)
 {
-    int N = plateau.size();
-    int M = plateau[0].size();
+    int N = board.size();
+    int M = board[0].size();
+    int f;
     for (int y = 0; y < M; y++)
     {
         for (int i = 0; i < N - 1; i++)
         {
-            if (plateau[i + 1][y] == plateau[i][y])
+            f = board[i][y];
+            if (f==0){continue;}
+            if (board[i + 1][y] == f)
             {
-                plateau[i + 1][y] = 0;
-                plateau[i][y] = 2 * plateau[i][y];
+                board[i + 1][y] = 0;
+                board[i][y] = 2 * f;
+                c++;
+                s = s + 2*f;
             }
         }
     }
 }
 
-void moveDown(Plateau &plateau)
+void moveDown(Board &board, int &c)
 {
-    int N = plateau.size();
-    int M = plateau[0].size();
+    int N = board.size();
+    int M = board[0].size();
     for (int y = 0; y < M; y++)
     {
         for (int i = N - 2; i >= 0; i--)
         {
             for (int j = i; j < N - 1; j++)
             {
-                if (plateau[j + 1][y] == 0)
+                if (board[j][y]==0){continue;}
+                if (board[j + 1][y] == 0)
                 {
-                    plateau[j + 1][y] = plateau[j][y];
-                    plateau[j][y] = 0;
+                    board[j + 1][y] = board[j][y];
+                    board[j][y] = 0;
+                    c++;
                 }
             }
         }
     }
 }
-void fuseDown(Plateau &plateau)
+void fuseDown(Board &board, int &c, int &s)
 {
-    int N = plateau.size();
-    int M = plateau[0].size();
+    int N = board.size();
+    int M = board[0].size();
+    int f;
     for (int y = 0; y < M; y++)
     {
         for (int i = N - 1; i > 0; i--)
         {
-            if (plateau[i - 1][y] == plateau[i][y])
+            f = board[i][y];
+            if (f==0){continue;}
+            if (board[i - 1][y] == f)
             {
-                plateau[i - 1][y] = 0;
-                plateau[i][y] = 2 * plateau[i][y];
+                board[i - 1][y] = 0;
+                board[i][y] = 2 * f;
+                c++;
+                s = s + 2*f;
             }
         }
     }
 }
 
-void slide(Plateau &plateau, int dir)
+void slide(Board &board, int dir, int &s)
 {
+    int c = 0;
     switch (dir)
     {
     case 0: // up
-        moveUp(plateau);
-        fuseUp(plateau);
-        moveUp(plateau);
+        moveUp(board, c);
+        fuseUp(board, c, s);
+        moveUp(board, c);
         break;
 
     case 1: // down
-        moveDown(plateau);
-        fuseDown(plateau);
-        moveDown(plateau);
+        moveDown(board, c);
+        fuseDown(board, c, s);
+        moveDown(board, c);
         break;
     case 2: // left
-        moveLeft(plateau);
-        fuseLeft(plateau);
-        moveLeft(plateau);
+        moveLeft(board, c);
+        fuseLeft(board, c, s);
+        moveLeft(board, c);
         break;
     case 3: // right
-        moveRight(plateau);
-        fuseRight(plateau);
-        moveRight(plateau);
+        moveRight(board, c);
+        fuseRight(board, c, s);
+        moveRight(board, c);
         break;
     }
-    spawn(plateau);
+    if (c){
+        spawn(board);
+    }
 }
