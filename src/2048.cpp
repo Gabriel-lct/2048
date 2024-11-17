@@ -7,8 +7,7 @@
 
 Game *game = nullptr;
 
-int main(int argc, char const *argv[])
-{
+void run_GUI(){
     const int FPS = 60;
     const int frameDelay = 1000 / FPS;
 
@@ -38,27 +37,40 @@ int main(int argc, char const *argv[])
     }
 
     game->clean();
+}
+
+void run_CLI(){
+    int N = 4;
+    int M = 4;
+
+    Plateau plateau = genPlateau(N, M);
+
+    while (true)
+    {
+        displayBoard(plateau);
+        int dir = takeInput();
+        if (dir == -1)
+        {
+            std::cout << "Commande invalide" << std::endl;
+        }
+        else
+        {
+            slide(plateau, dir);
+        }
+    }
+}
+
+int main(int argc, char const *argv[])
+{
+
+    int MODE;
+    std::cout << "Please select a Game Mode: GUI (1), CLI (2): ";
+    std::cin >> MODE;
+    if (MODE == 1){
+        run_GUI();
+    } else if (MODE == 2){
+        run_CLI();
+    }
 
     return 0;
 }
-
-/*     int N = 4;
-int M = 4;
-
-Plateau plateau = genPlateau(N, M);
-
-while (true)
-{
-    displayBoard(plateau);
-    int dir = takeInput();
-    if (dir == -1)
-    {
-        std::cout << "Commande invalide" << std::endl;
-    }
-    else
-    {
-        slide(plateau, dir);
-    }
-}
-
-return 0; */

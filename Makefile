@@ -10,7 +10,7 @@ CXXFLAGS = -std=c++17 -Wall -I/usr/include/SDL2  # Include SDL2 headers
 LDFLAGS = -lSDL2 -lSDL2_ttf  # Link SDL2 and SDL2_ttf libraries
 
 # Dossier de sortie
-OUT_DIR = ./bin
+OUT_DIR = .
 
 # Dossier contenant la police
 FONT_DIR = ./fonts/ClearSans
@@ -18,13 +18,13 @@ FONT_DIR = ./fonts/ClearSans
 # Règle pour compiler le programme
 $(TARGET): $(SRC)
 	$(CXX) $(CXXFLAGS) -o $(OUT_DIR)/$(TARGET) $(SRC) $(LDFLAGS)
-	make copy-font
+#	make copy-font
 
 # Copier les fichiers de police dans le répertoire de sortie
-copy-font:
-	cp $(FONT_DIR)/*.ttf $(OUT_DIR)/
+#copy-font:
+#	cp $(FONT_DIR)/*.ttf $(OUT_DIR)/
 
 # Nettoyer les fichiers générés
-clean:
-	rm -f $(OUT_DIR)/$(TARGET)
-	rm -f $(OUT_DIR)/*.ttf
+#clean:
+#	rm -f $(OUT_DIR)/$(TARGET)
+#	rm -f $(OUT_DIR)/*.ttf
