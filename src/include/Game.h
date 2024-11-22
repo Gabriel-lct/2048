@@ -36,11 +36,11 @@ private:
     SDL_Renderer *renderer;
 };
 
-
-const std::map<char, int> WASD = {{'w', 0}, {'s', 1}, {'a', 2}, {'d', 3}};
-const std::map<char, int> ZQSD = {{'z', 0}, {'s', 1}, {'q', 2}, {'d', 3}};
-const std::map<char, int> FR = {{'h', 0}, {'b', 1}, {'g', 2}, {'d', 3}};
-const std::map<char, int> EN = {{'u', 0}, {'d', 1}, {'l', 2}, {'r', 3}};
+//u l d r
+const std::map<char, int> WASD = {{'w', 0}, {'a', 1}, {'s', 2}, {'d', 3}};
+const std::map<char, int> ZQSD = {{'z', 0}, {'q', 1}, {'s', 2}, {'d', 3}};
+const std::map<char, int> FR = {{'h', 0}, {'d', 1}, {'b', 2}, {'g', 3}};
+const std::map<char, int> EN = {{'u', 0}, {'l', 1}, {'d', 2}, {'r', 3}};
 
 Board genBoard(int N, int M);
 
@@ -57,6 +57,9 @@ void fuseUp(Board &p, int &c, int &s);
 
 void moveDown(Board &p);
 void fuseDown(Board &p, int &c, int &s);
+
+void move(Board &p);
+void fuse(Board &p, int &c, int &s);
 
 void spawn(Board &p);
 

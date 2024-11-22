@@ -1,5 +1,6 @@
 #include "./include/Utils.h"
 #include <cmath>
+#include <vector>
 
 /**
  * @brief Compte le nombre de chiffres dans un entier donné.
@@ -43,5 +44,34 @@ void clearConsole()
     if (system("clear"))
     {
         system("cls");
+    }
+}
+
+
+void reverseVector(vector<int> &v)
+{
+    int s = v.size();
+    for (int i=0; i<s/2; i++)
+    {
+        int o = v[i];
+        v[i] = v[s-i-1];
+        v[s-i-1] = o;
+    }
+}
+
+void rotateMatrix(vector<vector<int>>& matrix, int t) {
+    int n = matrix.size();
+    for (int l=0; l<t; l++){
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                int o = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = o;
+            }
+        }
+        for (int i = 0; i < n; ++i) {
+            reverseVector(matrix[i]);
+        }
+    
     }
 }

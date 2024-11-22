@@ -11,4 +11,8 @@ int biggestElement(vector<vector<int>>);
 
 void clearConsole();
 
+void reverseVector(vector<int> &v);
+
+void rotateMatrix(vector<vector<int>>& m, int t);
+
 #endif

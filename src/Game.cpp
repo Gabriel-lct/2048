@@ -69,6 +69,7 @@ void Game::handleEvents()
     case SDL_QUIT:
         isRunning = false;
         break;
+    case SDL_KEYDOWN:
 
     default:
         break;
@@ -239,96 +240,7 @@ int takeInput()
     return dir;
 }
 
-
-// NxM
-//  0: up, 1: down, 2: right, 3: left
-void moveRight(Board &board, int &c)
-{
-    int N = board.size();
-    int M = board[0].size();
-    for (int y = 0; y < N; y++)
-    {
-        for (int i = M - 2; i >= 0; i--)
-        {
-            for (int j = i; j < M - 1; j++)
-            {
-                if (board[y][j]==0){continue;}
-                if (board[y][j + 1] == 0)
-                {
-                    board[y][j + 1] = board[y][j];
-                    board[y][j] = 0;
-                    c++;
-                }
-            }
-        }
-    }
-}
-void fuseRight(Board &board, int &c, int &s)
-{
-    int N = board.size();
-    int M = board[0].size();
-    int f;
-    for (int y = 0; y < N; y++)
-    {
-        for (int i = M - 1; i > 0; i--)
-        {
-            f = board[y][i];
-            if (f==0){continue;}
-            if (board[y][i - 1] == f)
-            {
-                board[y][i - 1] = 0;
-                board[y][i] = 2 * f;
-                c++;
-                s = s + 2*f;
-            }
-        }
-    }
-}
-
-void moveLeft(Board &board, int &c)
-{
-    int N = board.size();
-    int M = board[0].size();
-    for (int y = 0; y < N; y++)
-    {
-        for (int i = 0; i < M; i++)
-        {
-            for (int j = i; j > 0; j--)
-            {
-                if (board[y][j]==0){continue;}
-                if (board[y][j - 1] == 0)
-                {
-                    board[y][j - 1] = board[y][j];
-                    board[y][j] = 0;
-                    c++;
-                }
-            }
-        }
-    }
-}
-void fuseLeft(Board &board, int &c, int &s)
-{
-    int N = board.size();
-    int M = board[0].size();
-    int f;
-    for (int y = 0; y < N; y++)
-    {
-        for (int i = 0; i < M - 1; i++)
-        {
-            f = board[y][i];
-            if (f==0){continue;}
-            if (board[y][i + 1] == f)
-            {
-                board[y][i + 1] = 0;
-                board[y][i] = 2 * f;
-                c++;
-                s = s + 2*f;
-            }
-        }
-    }
-}
-
-void moveUp(Board &board, int &c)
+void move(Board &board, int &c)
 {
     int N = board.size();
     int M = board[0].size();
@@ -349,7 +261,7 @@ void moveUp(Board &board, int &c)
         }
     }
 }
-void fuseUp(Board &board, int &c, int &s)
+void fuse(Board &board, int &c, int &s)
 {
     int N = board.size();
     int M = board[0].size();
@@ -370,77 +282,15 @@ void fuseUp(Board &board, int &c, int &s)
         }
     }
 }
-
-void moveDown(Board &board, int &c)
-{
-    int N = board.size();
-    int M = board[0].size();
-    for (int y = 0; y < M; y++)
-    {
-        for (int i = N - 2; i >= 0; i--)
-        {
-            for (int j = i; j < N - 1; j++)
-            {
-                if (board[j][y]==0){continue;}
-                if (board[j + 1][y] == 0)
-                {
-                    board[j + 1][y] = board[j][y];
-                    board[j][y] = 0;
-                    c++;
-                }
-            }
-        }
-    }
-}
-void fuseDown(Board &board, int &c, int &s)
-{
-    int N = board.size();
-    int M = board[0].size();
-    int f;
-    for (int y = 0; y < M; y++)
-    {
-        for (int i = N - 1; i > 0; i--)
-        {
-            f = board[i][y];
-            if (f==0){continue;}
-            if (board[i - 1][y] == f)
-            {
-                board[i - 1][y] = 0;
-                board[i][y] = 2 * f;
-                c++;
-                s = s + 2*f;
-            }
-        }
-    }
-}
-
+//0: up, 1: left, 2: down, 3: right
 void slide(Board &board, int dir, int &s)
 {
     int c = 0;
-    switch (dir)
-    {
-    case 0: // up
-        moveUp(board, c);
-        fuseUp(board, c, s);
-        moveUp(board, c);
-        break;
-
-    case 1: // down
-        moveDown(board, c);
-        fuseDown(board, c, s);
-        moveDown(board, c);
-        break;
-    case 2: // left
-        moveLeft(board, c);
-        fuseLeft(board, c, s);
-        moveLeft(board, c);
-        break;
-    case 3: // right
-        moveRight(board, c);
-        fuseRight(board, c, s);
-        moveRight(board, c);
-        break;
-    }
+    rotateMatrix(board, dir);
+    move(board, c);
+    fuse(board, c, s);
+    move(board, c);
+    rotateMatrix(board, (4-dir)%4);
     if (c){
         spawn(board);
     }
