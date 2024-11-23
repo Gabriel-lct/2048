@@ -8,7 +8,6 @@
 #include <map>
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 
 using Board = std::vector<std::vector<int>>;
@@ -27,16 +26,14 @@ public:
     bool running();
 
     Board initiadeGrid();
-    void drawGrid(Board);
 
 private:
     bool isRunning;
-    TTF_Font *font;
     SDL_Window *window;
     SDL_Renderer *renderer;
 };
 
-//u l d r
+// u l d r
 const std::map<char, int> WASD = {{'w', 0}, {'a', 1}, {'s', 2}, {'d', 3}};
 const std::map<char, int> ZQSD = {{'z', 0}, {'q', 1}, {'s', 2}, {'d', 3}};
 const std::map<char, int> FR = {{'h', 0}, {'d', 1}, {'b', 2}, {'g', 3}};
@@ -46,23 +43,11 @@ Board genBoard(int N, int M);
 
 int takeInput();
 
-void moveRight(Board &p);
-void fuseRight(Board &p, int &c, int &s);
-
-void moveLeft(Board &p);
-void fuseLeft(Board &p, int &c, int &s);
-
-void moveUp(Board &p);
-void fuseUp(Board &p, int &c, int &s);
-
-void moveDown(Board &p);
-void fuseDown(Board &p, int &c, int &s);
-
-void move(Board &p);
+void move(Board &p, int &c);
 void fuse(Board &p, int &c, int &s);
 
-void spawn(Board &p);
+void spawn(Board &p, int &c);
 
-void slide(Board &p, int dir, int &s);
+void slide(Board &p, int dir, int &s, int &c);
 
 #endif

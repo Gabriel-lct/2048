@@ -2,9 +2,9 @@
 #define DISPLAY_H
 
 #include <vector>
-using std::vector;
-
 using Board = std::vector<std::vector<int>>;
+
+using std::vector;
 
 void displayBoard(Board);
 

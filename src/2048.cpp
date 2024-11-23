@@ -2,15 +2,14 @@
 #include "./include/Game.h"
 #include "./include/Utils.h"
 
-
 #include <iostream>
 #include <stdlib.h>
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
 
 Game *game = nullptr;
 
-void run_GUI(){
+void run_GUI()
+{
     const int FPS = 60;
     const int frameDelay = 1000 / FPS;
 
@@ -42,7 +41,8 @@ void run_GUI(){
     game->clean();
 }
 
-void run_CLI(){
+void run_CLI()
+{
     clearConsole();
     int N = 4;
     int M = 4;
@@ -61,7 +61,9 @@ void run_CLI(){
         }
         else
         {
-            slide(board, dir, S);
+            int c = 0;
+            slide(board, dir, S, c);
+            spawn(board, c);
             clearConsole();
         }
     }
@@ -71,13 +73,18 @@ int main(int argc, char const *argv[])
 {
 
     int DISPLAY_MODE;
-    std::cout << "Please select a Game Mode: GUI (1), CLI (2): ";
+    // Provisionally using only CLI
+    run_CLI();
+    /* std::cout << "Please select a Game Mode: GUI (1), CLI (2): ";
     std::cin >> DISPLAY_MODE;
-    if (DISPLAY_MODE == 1){
+    if (DISPLAY_MODE == 1)
+    {
         run_GUI();
-    } else if (DISPLAY_MODE == 2){
-        run_CLI();
     }
+    else if (DISPLAY_MODE == 2)
+    {
+        run_CLI();
+    } */
 
     return 0;
 }

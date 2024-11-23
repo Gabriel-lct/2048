@@ -37,6 +37,7 @@ std::string createLine(int numberOfCells, int cellSpace)
  *
  * @param board A 2D vector of integers representing the game board.
  */
+
 void displayBoard(vector<vector<int>> board)
 {
     int numberOfCells = board[0].size();
@@ -50,7 +51,18 @@ void displayBoard(vector<vector<int>> board)
         {
             int numberOfDigits = countDigits(cell);
             int spaces = cellSpace - numberOfDigits;
-            std::cout << std::string(spaces / 2, ' ') << cell << std::string((spaces + 1) / 2, ' ') << "*";
+            if (cell != 0)
+            {
+                auto [r, g, b] = getCellColor(cell);
+                std::cout << "\033[48;2;" << r << ";" << g << ";" << b << "m"
+                          << "\033[30m"
+                          << std::string(spaces / 2, ' ') << cell << std::string((spaces + 1) / 2, ' ')
+                          << "\033[0m" << "*";
+            }
+            else
+            {
+                std::cout << std::string(spaces / 2, ' ') << cell << std::string((spaces + 1) / 2, ' ') << "*";
+            }
         }
         std::cout << std::endl;
         std::cout << createLine(numberOfCells, cellSpace) << std::endl;

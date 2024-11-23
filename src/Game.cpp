@@ -42,21 +42,6 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     std::cout << "Renderer created" << std::endl;
 
-    // Initialize SDL_ttf library
-    if (TTF_Init() == -1)
-    {
-        std::cout << "Failed to initialize SDL_ttf: " << TTF_GetError() << std::endl;
-        return;
-    }
-
-    // Load the font and set the font size
-    font = TTF_OpenFont("./fonts/ClearSans/ClearSans-Medium.ttf", 24);
-    if (font == nullptr)
-    {
-        std::cout << "Failed to load font: " << TTF_GetError() << std::endl;
-        return;
-    }
-
     isRunning = true;
 }
 
@@ -82,7 +67,6 @@ void Game::update() {
 void Game::render()
 {
     SDL_RenderClear(renderer);
-    drawGrid(test_board);
     SDL_RenderPresent(renderer);
 }
 
@@ -90,8 +74,6 @@ void Game::clean()
 {
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
-    TTF_CloseFont(font);
-    TTF_Quit();
     SDL_Quit();
     std::cout << "Game cleaned" << std::endl;
 }
@@ -99,60 +81,6 @@ void Game::clean()
 bool Game::running()
 {
     return isRunning;
-}
-
-void Game::drawGrid(Board board)
-{
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    int screenWidth, screenHeight;
-    SDL_GetRendererOutputSize(renderer, &screenWidth, &screenHeight);
-
-    int gridSize = 400;
-    int gridX = (screenWidth - gridSize) / 2;
-    int gridY = (screenHeight - gridSize) / 2;
-
-    SDL_Rect gridRect = {gridX, gridY, gridSize, gridSize};
-    SDL_RenderFillRect(renderer, &gridRect);
-
-    for (int row = 0; row < 4; ++row)
-    {
-        for (int col = 0; col < 4; ++col)
-        {
-            SDL_Rect tileRect = {gridX + col * 100 + 10, gridY + row * 100 + 10, 90, 90};
-            SDL_SetRenderDrawColor(renderer, 100, 200, 200, 255);
-            SDL_RenderFillRect(renderer, &tileRect);
-
-            int tileValue = board[row][col];
-
-            if (tileValue != 0)
-            {
-                std::string text = std::to_string(tileValue);
-
-                SDL_Color textColor = {0, 0, 0, 255};
-                SDL_Surface *textSurface = TTF_RenderText_Solid(font, text.c_str(), textColor);
-
-                if (textSurface)
-                {
-                    SDL_Texture *textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-                    SDL_FreeSurface(textSurface);
-
-                    if (textTexture)
-                    {
-                        int textWidth, textHeight;
-                        SDL_QueryTexture(textTexture, NULL, NULL, &textWidth, &textHeight);
-                        SDL_Rect textRect = {
-                            tileRect.x + (tileRect.w - textWidth) / 2,
-                            tileRect.y + (tileRect.h - textHeight) / 2,
-                            textWidth,
-                            textHeight};
-
-                        SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
-                        SDL_DestroyTexture(textTexture);
-                    }
-                }
-            }
-        }
-    }
 }
 
 /* Game Luca */
@@ -165,10 +93,16 @@ std::map<char, int> MODE = WASD;
  * to a random integer, either 2 (90%) or 4 (10%)
  *
  * @param board The 2D vector containing integer elements.
+ * @param c A condition to check before spawning a new tile. If c is 0, the function returns immediately without spawning a tile.
  */
 
-void spawn(Board &board)
+void spawn(Board &board, int &c)
 {
+    if (!c)
+    {
+        return;
+    }
+
     int x, y, v;
     int N = board.size();
     int M = board[0].size();
@@ -204,9 +138,10 @@ Board genBoard(int N, int M)
 {
     srand(time(NULL));
     Board p(N, std::vector<int>(M, 0));
+    int c = 1;
 
-    spawn(p);
-    spawn(p);
+    spawn(p, c);
+    spawn(p, c);
 
     return p;
 }
@@ -250,7 +185,10 @@ void move(Board &board, int &c)
         {
             for (int j = i; j > 0; j--)
             {
-                if (board[j][y]==0){continue;}
+                if (board[j][y] == 0)
+                {
+                    continue;
+                }
                 if (board[j - 1][y] == 0)
                 {
                     board[j - 1][y] = board[j][y];
@@ -271,27 +209,26 @@ void fuse(Board &board, int &c, int &s)
         for (int i = 0; i < N - 1; i++)
         {
             f = board[i][y];
-            if (f==0){continue;}
+            if (f == 0)
+            {
+                continue;
+            }
             if (board[i + 1][y] == f)
             {
                 board[i + 1][y] = 0;
                 board[i][y] = 2 * f;
                 c++;
-                s = s + 2*f;
+                s = s + 2 * f;
             }
         }
     }
 }
-//0: up, 1: left, 2: down, 3: right
-void slide(Board &board, int dir, int &s)
+// 0: up, 1: left, 2: down, 3: right
+void slide(Board &board, int dir, int &s, int &c)
 {
-    int c = 0;
     rotateMatrix(board, dir);
     move(board, c);
     fuse(board, c, s);
     move(board, c);
-    rotateMatrix(board, (4-dir)%4);
-    if (c){
-        spawn(board);
-    }
+    rotateMatrix(board, (4 - dir) % 4);
 }
