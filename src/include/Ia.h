@@ -20,4 +20,6 @@ bool boardExists(const BoardVect &boardVect, const Board &board);
 
 void decisionTree(Board board, int depthLevel);
 
+double evaluateBoard(const Board &board);
+
 #endif

@@ -29,11 +29,11 @@ void displayAllPossibilities(BoardVect boardVect)
 int numberEmptyCells(Board board)
 {
     int numberEmptyCells;
-    for (Board::size_type i = 0; i < board.size(); i++)
+    for (auto &row : board)
     {
-        for (Board::size_type j = 0; j < board.size(); j++)
+        for (auto &cell : row)
         {
-            if (board[i][j] == 0)
+            if (cell == 0)
             {
                 numberEmptyCells++;
             }
@@ -42,6 +42,12 @@ int numberEmptyCells(Board board)
     return numberEmptyCells;
 }
 
+/**
+ * @brief Generates all possible board configurations by spawning a 2 or 4 in each empty cell.
+ *
+ * @param board The current board configuration.
+ * @return A vector of board configurations with all possible spawns of 2 and 4 in empty cells.
+ */
 BoardVect generateSpawnPossibilities(Board board)
 {
     BoardVect possibilities;
@@ -64,6 +70,14 @@ BoardVect generateSpawnPossibilities(Board board)
     return possibilities;
 }
 
+/**
+ * @brief Checks if a given board exists in a vector of boards.
+ *
+ * @param boardVect A vector of boards to search through.
+ * @param board The board to check for existence in the vector.
+ * @return true If the board exists in the vector.
+ * @return false If the board does not exist in the vector.
+ */
 bool boardExists(const BoardVect &boardVect, const Board &board)
 {
     for (const auto &existingBoard : boardVect)
@@ -85,10 +99,8 @@ void decisionTree(Board board, int depthLevel)
     {
         BoardVect newTree;
         // do the process for each Board of the tree
-        for (BoardVect::size_type j = 0; j < tree.size(); j++)
+        for (Board &board : tree)
         {
-            Board board = tree[j];
-
             for (int dir = 0; dir < 4; dir++)
             {
                 int S = 100;
@@ -97,12 +109,11 @@ void decisionTree(Board board, int depthLevel)
                 slide(dupliBoard, dir, S, c);
 
                 BoardVect possibilities = generateSpawnPossibilities(dupliBoard);
-                for (BoardVect::size_type i = 0; i < possibilities.size(); i++)
+                for (Board &board : possibilities)
                 {
-                    newTree.push_back(possibilities[i]);
-                    if (!boardExists(newTree, possibilities[i]))
+                    if (!boardExists(newTree, board))
                     {
-                        newTree.push_back(possibilities[i]);
+                        newTree.push_back(board);
                     }
                 }
             }
@@ -110,4 +121,38 @@ void decisionTree(Board board, int depthLevel)
         tree = newTree;
     }
     std::cout << "tree size: " << tree.size() << std::endl;
+}
+
+double evaluateBoard(Board &board)
+{
+    double score = 0.0;
+
+    // Criteria n°1 - Max tile in corner
+    int maxTile = biggestTile(board);
+
+    if (board[0][0] == maxTile || board[0][board.size() - 1] == maxTile || board[board.size() - 1][0] == maxTile || board[board.size() - 1][board.size() - 1] == maxTile)
+    {
+        score += 1.5 * maxTile;
+    }
+
+    // Criteria n°2 : power of 2 proximity
+    for (Board::size_type i = 0; i < board.size(); ++i)
+    {
+        for (Vect::size_type j = 0; j < board[i].size(); ++j)
+        {
+            if (board[i][j] != 0)
+            {
+                if (i > 0 && board[i - 1][j] != 0)
+                {
+                    score -= std::abs(board[i][j] - board[i - 1][j]);
+                }
+                if (j > 0 && board[i][j - 1] != 0)
+                {
+                    score -= std::abs(board[i][j] - board[i][j - 1]);
+                }
+            }
+        }
+    }
+
+    return score;
 }

@@ -3,6 +3,9 @@
 #include <vector>
 #include <map>
 
+using Vect = std::vector<int>;
+using Board = std::vector<std::vector<int>>;
+
 /**
  * @brief Compte le nombre de chiffres dans un entier donné.
  *
@@ -21,7 +24,7 @@ int countDigits(int n)
  * @return int The largest element in the board.
  */
 
-int biggestElement(vector<vector<int>> board)
+int biggestTile(Board &board)
 {
     int biggest = board[0][0];
     for (const auto &line : board)
@@ -42,7 +45,7 @@ void clearConsole()
     }
 }
 
-void reverseVector(vector<int> &v)
+void reverseVector(Vect &v)
 {
     int s = v.size();
     for (int i = 0; i < s / 2; i++)
@@ -53,7 +56,7 @@ void reverseVector(vector<int> &v)
     }
 }
 
-void rotateMatrix(vector<vector<int>> &matrix, int t)
+void rotateMatrix(Board &matrix, int t)
 {
     int n = matrix.size();
     for (int l = 0; l < t; l++)

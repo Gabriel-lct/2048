@@ -32,7 +32,7 @@ std::string createLine(int numberOfCells, int cellSpace)
 void displayBoard(vector<vector<int>> board)
 {
     int numberOfCells = board[0].size();
-    int cellSpace = std::max(countDigits(biggestElement(board)), 5);
+    int cellSpace = std::max(countDigits(biggestTile(board)), 5);
 
     std::cout << createLine(numberOfCells, cellSpace) << std::endl;
     for (const auto &line : board)

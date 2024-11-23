@@ -7,7 +7,6 @@
 #include <vector>
 #include <map>
 
-#include <vector>
 using Board = std::vector<std::vector<int>>;
 
 Board genBoard(int N, int M);
