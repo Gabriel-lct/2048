@@ -6,9 +6,6 @@
 /**
  * @brief Compte le nombre de chiffres dans un entier donné.
  *
- * Cette fonction prend un entier en entrée et retourne le nombre de chiffres
- * qu'il contient. Par exemple, pour l'entrée 1214, la fonction retournera 4.
- *
  * @param n L'entier dont on veut compter les chiffres.
  * @return Le nombre de chiffres dans l'entier donné.
  */
@@ -19,9 +16,6 @@ int countDigits(int n)
 
 /**
  * @brief Finds the largest element in a 2D vector.
- *
- * This function iterates through each element of a 2D vector (board) to find
- * and return the largest element.
  *
  * @param board The 2D vector containing integer elements.
  * @return int The largest element in the board.
@@ -82,9 +76,6 @@ void rotateMatrix(vector<vector<int>> &matrix, int t)
 
 /**
  * @brief Returns the RGB color associated with a given cell value in the 2048 game.
- *
- * This function maps the value of a cell to its corresponding RGB color.
- * If the value is not found in the predefined color map, it returns black (0, 0, 0).
  *
  * @param value The value of the cell.
  * @return A tuple containing the RGB color (red, green, blue) associated with the cell value.

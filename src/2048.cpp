@@ -1,6 +1,7 @@
 #include "./include/Display.h"
 #include "./include/Game.h"
 #include "./include/Utils.h"
+#include "./include/Ia.h"
 
 #include <iostream>
 #include <stdlib.h>
@@ -69,12 +70,38 @@ void run_CLI()
     }
 }
 
+void run_AI()
+{
+    clearConsole();
+    int N = 4;
+    int M = 4;
+    int S = 0;
+
+    Board board = genBoard(N, M);
+
+    while (true)
+    {
+        std::cout << "SCORE: " << S << std::endl;
+        displayBoard(board);
+        int dir = takeInput();
+        if (dir == -1)
+        {
+            std::cout << "Commande invalide" << std::endl;
+        }
+        else
+        {
+            mainIA(board);
+            // clearConsole();
+        }
+    }
+}
+
 int main(int argc, char const *argv[])
 {
 
-    int DISPLAY_MODE;
+    // int DISPLAY_MODE;
     // Provisionally using only CLI
-    run_CLI();
+    run_AI();
     /* std::cout << "Please select a Game Mode: GUI (1), CLI (2): ";
     std::cin >> DISPLAY_MODE;
     if (DISPLAY_MODE == 1)
