@@ -7,6 +7,8 @@
 #include <iostream>
 #include <stdlib.h>
 #include <SDL2/SDL.h>
+#include <thread>
+#include <chrono>
 
 void run_GUI()
 {
@@ -79,23 +81,23 @@ void run_AI()
     int N = 4;
     int M = 4;
     int S = 0;
-
     Board board = genBoard(N, M);
 
     while (true)
     {
         std::cout << "SCORE: " << S << std::endl;
         displayBoard(board);
-        int dir = takeInput();
+        int c = 0;
+        int dir = findBestMove(board, S, 6);
         if (dir == -1)
         {
-            std::cout << "Commande invalide" << std::endl;
+            std::cout << "Game over!" << std::endl;
+            return;
         }
-        else
-        {
-            mainIA(board);
-            // clearConsole();
-        }
+        slide(board, dir, S, c);
+        spawn(board, c);
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        clearConsole();
     }
 }
 

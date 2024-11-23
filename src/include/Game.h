@@ -20,6 +20,8 @@ void spawn(Board &p, int &c);
 
 void slide(Board &p, int dir, int &s, int &c);
 
+bool isGameOver(Board &board);
+
 // u l d r
 const std::map<char, int>
     WASD = {{'w', 0}, {'a', 1}, {'s', 2}, {'d', 3}};

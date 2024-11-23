@@ -3,22 +3,6 @@
 #include "./include/Game.h"
 #include "./include/Display.h"
 
-// Only for dev use
-void mainIA(Board board)
-{
-    decisionTree(board, 2);
-}
-
-void displayAllPossibilities(BoardVect boardVect)
-{
-    for (BoardVect::size_type i = 0; i < boardVect.size(); i++)
-    {
-        displayBoard(boardVect[i]);
-        std::cout << "" << std::endl;
-    }
-    std::cout << "number of possibilities rendered : " << boardVect.size() << std::endl;
-}
-
 /**
  * @brief Counts the number of empty cells in the given board.
  *
@@ -26,7 +10,7 @@ void displayAllPossibilities(BoardVect boardVect)
  * @return int The number of empty cells in the board.
  */
 
-int numberEmptyCells(Board board)
+int numberEmptyCells(Board &board)
 {
     int numberEmptyCells;
     for (auto &row : board)
@@ -48,7 +32,7 @@ int numberEmptyCells(Board board)
  * @param board The current board configuration.
  * @return A vector of board configurations with all possible spawns of 2 and 4 in empty cells.
  */
-BoardVect generateSpawnPossibilities(Board board)
+BoardVect generatePossibleSpawns(Board &board)
 {
     BoardVect possibilities;
 
@@ -90,49 +74,73 @@ bool boardExists(const BoardVect &boardVect, const Board &board)
     return false;
 }
 
-void decisionTree(Board board, int depthLevel)
+std::pair<double, int> minimax(Board board, int score, int depth, double alpha, double beta, bool isMaximizingPlayer)
 {
-    BoardVect tree = {board};
-
-    // iterate depthLevel time the process
-    for (int i = 0; i < depthLevel; i++)
+    if (depth == 0 || isGameOver(board))
     {
-        BoardVect newTree;
-        // do the process for each Board of the tree
-        for (Board &board : tree)
-        {
-            for (int dir = 0; dir < 4; dir++)
-            {
-                int S = 100;
-                int c = 0;
-                Board dupliBoard = board;
-                slide(dupliBoard, dir, S, c);
+        return {evaluateBoard(board, score), -1};
+    }
 
-                BoardVect possibilities = generateSpawnPossibilities(dupliBoard);
-                for (Board &board : possibilities)
-                {
-                    if (!boardExists(newTree, board))
-                    {
-                        newTree.push_back(board);
-                    }
-                }
+    if (isMaximizingPlayer)
+    {
+        double maxEval = -std::numeric_limits<double>::infinity();
+        int bestDir = -1;
+        for (int dir = 0; dir < 4; dir++)
+        {
+            int c = 0;
+            Board dupliBoard = board;
+            slide(dupliBoard, dir, score, c);
+            if (dupliBoard == board)
+            {
+                continue;
+            }
+            auto [eval, _] = minimax(dupliBoard, score, depth - 1, alpha, beta, false);
+            if (eval > maxEval)
+            {
+                maxEval = eval;
+                bestDir = dir;
+            }
+            alpha = std::max(alpha, eval);
+            if (beta <= alpha)
+            {
+                break;
             }
         }
-        tree = newTree;
+        return {maxEval, bestDir};
     }
-    std::cout << "tree size: " << tree.size() << std::endl;
+    else
+    {
+        double minEval = std::numeric_limits<double>::infinity();
+        for (Board &childBoard : generatePossibleSpawns(board))
+        {
+            auto [eval, _] = minimax(childBoard, score, depth - 1, alpha, beta, true);
+            minEval = std::min(minEval, eval);
+            beta = std::min(beta, eval);
+            if (beta <= alpha)
+            {
+                break;
+            }
+        }
+        return {minEval, -1};
+    }
 }
 
-double evaluateBoard(Board &board)
+int findBestMove(Board &board, int &score, const int &depth)
 {
-    double score = 0.0;
+    auto [_, bestDir] = minimax(board, score, depth, -std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity(), true);
+    return bestDir;
+}
+
+double evaluateBoard(Board &board, int &score)
+{
+    double evaluation = 0.0;
 
     // Criteria n°1 - Max tile in corner
     int maxTile = biggestTile(board);
 
     if (board[0][0] == maxTile || board[0][board.size() - 1] == maxTile || board[board.size() - 1][0] == maxTile || board[board.size() - 1][board.size() - 1] == maxTile)
     {
-        score += 1.5 * maxTile;
+        evaluation += 10 * maxTile;
     }
 
     // Criteria n°2 : power of 2 proximity
@@ -144,15 +152,17 @@ double evaluateBoard(Board &board)
             {
                 if (i > 0 && board[i - 1][j] != 0)
                 {
-                    score -= std::abs(board[i][j] - board[i - 1][j]);
+                    evaluation -= 2 * std::abs(board[i][j] - board[i - 1][j]);
                 }
                 if (j > 0 && board[i][j - 1] != 0)
                 {
-                    score -= std::abs(board[i][j] - board[i][j - 1]);
+                    evaluation -= 2 * std::abs(board[i][j] - board[i][j - 1]);
                 }
             }
         }
     }
 
-    return score;
+    evaluation += 1.5 * score;
+
+    return evaluation;
 }

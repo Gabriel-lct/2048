@@ -97,6 +97,21 @@ int takeInput()
     return dir;
 }
 
+bool isGameOver(Board &board)
+{
+    for (Vect line : board)
+    {
+        for (int cell : line)
+        {
+            if (cell == 0)
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 void move(Board &board, int &c)
 {
     int N = board.size();
