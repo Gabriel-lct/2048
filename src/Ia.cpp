@@ -99,6 +99,7 @@ void decisionTree(Board board, int depthLevel)
                 BoardVect possibilities = generateSpawnPossibilities(dupliBoard);
                 for (BoardVect::size_type i = 0; i < possibilities.size(); i++)
                 {
+                    newTree.push_back(possibilities[i]);
                     if (!boardExists(newTree, possibilities[i]))
                     {
                         newTree.push_back(possibilities[i]);

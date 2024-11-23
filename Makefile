@@ -2,7 +2,7 @@
 TARGET = 2048
 
 # Les fichiers sources
-SRC = ./src/2048.cpp ./src/Display.cpp ./src/Utils.cpp ./src/Game.cpp ./src/Ia.cpp
+SRC = ./src/2048.cpp ./src/Display.cpp ./src/Utils.cpp ./src/Game.cpp ./src/Ia.cpp ./src/GUI.cpp
 
 # Le compilateur et les options
 CXX = g++

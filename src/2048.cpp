@@ -2,34 +2,35 @@
 #include "./include/Game.h"
 #include "./include/Utils.h"
 #include "./include/Ia.h"
+#include "./include/GUI.h"
 
 #include <iostream>
 #include <stdlib.h>
 #include <SDL2/SDL.h>
 
-Game *game = nullptr;
-
 void run_GUI()
 {
+    GUI *gui = nullptr;
+
     const int FPS = 60;
     const int frameDelay = 1000 / FPS;
 
     Uint32 frameStart;
     int frameTime;
 
-    game = new Game();
+    gui = new GUI();
 
-    // Initialize the game with a title, position, size, and fullscreen option
-    game->init("2048 Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, false);
+    // Initialize the gui with a title, position, size, and fullscreen option
+    gui->init("2048 Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, false);
 
-    while (game->running())
+    while (gui->running())
     {
         // Initialize the Time before any instructions
         frameStart = SDL_GetTicks();
 
-        game->handleEvents();
-        game->update();
-        game->render();
+        gui->handleEvents();
+        gui->update();
+        gui->render();
 
         // Delay the frame to reach the wanted frameTime
         frameTime = SDL_GetTicks() - frameStart;
@@ -39,11 +40,12 @@ void run_GUI()
         }
     }
 
-    game->clean();
+    gui->clean();
 }
 
 void run_CLI()
 {
+
     clearConsole();
     int N = 4;
     int M = 4;
@@ -72,6 +74,7 @@ void run_CLI()
 
 void run_AI()
 {
+
     clearConsole();
     int N = 4;
     int M = 4;
@@ -98,7 +101,6 @@ void run_AI()
 
 int main(int argc, char const *argv[])
 {
-
     // int DISPLAY_MODE;
     // Provisionally using only CLI
     run_AI();
