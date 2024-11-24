@@ -1,7 +1,8 @@
 #include "./include/Display.h"
 #include "./include/Game.h"
 #include "./include/Utils.h"
-#include "./include/Ia.h"
+#include "./include/AI.h"
+#include "./include/GA.h"
 #include "./include/GUI.h"
 
 #include <iostream>
@@ -47,7 +48,6 @@ void run_GUI()
 
 void run_CLI()
 {
-
     clearConsole();
     int N = 4;
     int M = 4;
@@ -76,7 +76,12 @@ void run_CLI()
 
 void run_AI()
 {
-
+    VectDouble genome = {
+        1.,
+        1.,
+        1.,
+        1.,
+    };
     clearConsole();
     int N = 4;
     int M = 4;
@@ -88,7 +93,7 @@ void run_AI()
         std::cout << "SCORE: " << S << std::endl;
         displayBoard(board);
         int c = 0;
-        int dir = findBestMove(board, S, 6);
+        int dir = findBestMove(board, S, 6, genome);
         if (dir == -1)
         {
             std::cout << "Game over!" << std::endl;
@@ -101,11 +106,24 @@ void run_AI()
     }
 }
 
+void run_GA()
+{
+    VectDouble genome = {
+        1.,
+        1.,
+        1.,
+        1.,
+    };
+    std::cout << "Running GA..." << std::endl;
+    double average_score = fitnessFunction(genome, 2);
+    std::cout << "Average score: " << average_score << std::endl;
+}
+
 int main(int argc, char const *argv[])
 {
     // int DISPLAY_MODE;
     // Provisionally using only CLI
-    run_AI();
+    run_GA();
     /* std::cout << "Please select a Game Mode: GUI (1), CLI (2): ";
     std::cin >> DISPLAY_MODE;
     if (DISPLAY_MODE == 1)

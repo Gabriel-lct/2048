@@ -1,14 +1,7 @@
-#include "./include/Ia.h"
+#include "./include/AI.h"
 #include "./include/Utils.h"
 #include "./include/Game.h"
 #include "./include/Display.h"
-
-/**
- * @brief Counts the number of empty cells in the given board.
- *
- * @param board The game board represented as a 2D array.
- * @return int The number of empty cells in the board.
- */
 
 int numberEmptyCells(Board &board)
 {
@@ -26,12 +19,6 @@ int numberEmptyCells(Board &board)
     return numberEmptyCells;
 }
 
-/**
- * @brief Generates all possible board configurations by spawning a 2 or 4 in each empty cell.
- *
- * @param board The current board configuration.
- * @return A vector of board configurations with all possible spawns of 2 and 4 in empty cells.
- */
 BoardVect generatePossibleSpawns(Board &board)
 {
     BoardVect possibilities;
@@ -54,14 +41,6 @@ BoardVect generatePossibleSpawns(Board &board)
     return possibilities;
 }
 
-/**
- * @brief Checks if a given board exists in a vector of boards.
- *
- * @param boardVect A vector of boards to search through.
- * @param board The board to check for existence in the vector.
- * @return true If the board exists in the vector.
- * @return false If the board does not exist in the vector.
- */
 bool boardExists(const BoardVect &boardVect, const Board &board)
 {
     for (const auto &existingBoard : boardVect)
@@ -74,11 +53,11 @@ bool boardExists(const BoardVect &boardVect, const Board &board)
     return false;
 }
 
-std::pair<double, int> minimax(Board board, int score, int depth, double alpha, double beta, bool isMaximizingPlayer)
+std::pair<double, int> minimax(Board board, int score, VectDouble &genome, int depth, double alpha, double beta, bool isMaximizingPlayer)
 {
     if (depth == 0 || isGameOver(board))
     {
-        return {evaluateBoard(board, score), -1};
+        return {evaluateBoard(board, score, genome), -1};
     }
 
     if (isMaximizingPlayer)
@@ -94,7 +73,7 @@ std::pair<double, int> minimax(Board board, int score, int depth, double alpha, 
             {
                 continue;
             }
-            auto [eval, _] = minimax(dupliBoard, score, depth - 1, alpha, beta, false);
+            auto [eval, _] = minimax(dupliBoard, score, genome, depth - 1, alpha, beta, false);
             if (eval > maxEval)
             {
                 maxEval = eval;
@@ -113,7 +92,7 @@ std::pair<double, int> minimax(Board board, int score, int depth, double alpha, 
         double minEval = std::numeric_limits<double>::infinity();
         for (Board &childBoard : generatePossibleSpawns(board))
         {
-            auto [eval, _] = minimax(childBoard, score, depth - 1, alpha, beta, true);
+            auto [eval, _] = minimax(childBoard, score, genome, depth - 1, alpha, beta, true);
             minEval = std::min(minEval, eval);
             beta = std::min(beta, eval);
             if (beta <= alpha)
@@ -125,22 +104,27 @@ std::pair<double, int> minimax(Board board, int score, int depth, double alpha, 
     }
 }
 
-int findBestMove(Board &board, int &score, const int &depth)
+int findBestMove(Board &board, int &score, const int &depth, VectDouble &genome)
 {
-    auto [_, bestDir] = minimax(board, score, depth, -std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity(), true);
+    auto [_, bestDir] = minimax(board, score, genome, depth, -std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity(), true);
     return bestDir;
 }
 
-double evaluateBoard(Board &board, int &score)
+double evaluateBoard(Board &board, int &score, VectDouble &genome)
 {
     double evaluation = 0.0;
+
+    double w_max_tile = genome[0];
+    double w_proximity = genome[1];
+    double w_empty = genome[2];
+    double w_score = genome[3];
 
     // Criteria n°1 - Max tile in corner
     int maxTile = biggestTile(board);
 
     if (board[0][0] == maxTile || board[0][board.size() - 1] == maxTile || board[board.size() - 1][0] == maxTile || board[board.size() - 1][board.size() - 1] == maxTile)
     {
-        evaluation += 10 * maxTile;
+        evaluation += w_max_tile * maxTile;
     }
 
     // Criteria n°2 : power of 2 proximity
@@ -152,17 +136,22 @@ double evaluateBoard(Board &board, int &score)
             {
                 if (i > 0 && board[i - 1][j] != 0)
                 {
-                    evaluation -= 2 * std::abs(board[i][j] - board[i - 1][j]);
+                    evaluation -= w_proximity * std::abs(board[i][j] - board[i - 1][j]);
                 }
                 if (j > 0 && board[i][j - 1] != 0)
                 {
-                    evaluation -= 2 * std::abs(board[i][j] - board[i][j - 1]);
+                    evaluation -= w_proximity * std::abs(board[i][j] - board[i][j - 1]);
                 }
             }
         }
     }
 
-    evaluation += 1.5 * score;
+    // Criteria n°3 : number of empty cells
+    int emptyCells = numberEmptyCells(board);
+    evaluation += w_empty * emptyCells;
+
+    // Criteria n°4 : score
+    evaluation += w_score * score;
 
     return evaluation;
 }
