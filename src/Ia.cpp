@@ -136,7 +136,7 @@ double evaluateBoard(Board &board, int &score)
     // Criteria n°0: FEAR OF DEATH
     if (isGameOver(board))
     {
-        return 0;
+        return -std::numeric_limits<double>::max();
     }
 
     double evaluation = 0.0;
