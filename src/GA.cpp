@@ -16,7 +16,7 @@ double runAi(const VectDouble &genome)
     while (true)
     {
         int c = 0;
-        int dir = findBestMove(board, score, 6, genome);
+        int dir = findBestMove(board, score, 4, genome);
         if (dir == -1)
         {
             return score;
@@ -26,32 +26,88 @@ double runAi(const VectDouble &genome)
     }
 }
 
+void displayBestGenome(VectDouble &genome, const int &index)
+{
+    std::cout << "      Best genome n°" << index << ": ";
+    for (size_t i = 0; i < genome.size(); i++)
+    {
+        std::cout << genome[i];
+        if (i != genome.size() - 1)
+        {
+            std::cout << ", ";
+        }
+    }
+    std::cout << std::endl;
+}
+
 void runGeneticAlgorithm(BoardDouble &population, int &maxGamesPerGenome, int maxGenerations, double mutationRate, double mutationStrength)
 {
+    BoardDouble genomesEvolution;
+    Vect fitnessScoresEvolution;
     for (int generation = 0; generation < maxGenerations; generation++)
     {
-        // Etape 1 - Evaluation
-        std::cout << "First step: Evaluation" << std::endl;
-        VectDouble fitnessScores = evaluatePopulation(population, maxGamesPerGenome);
+        std::cout << std::endl;
+        std::cout << "Génération " << generation << std::endl;
+        std::cout << std::endl;
 
-        std::cout << "Second step: Selection" << std::endl;
+        // Etape 1 - Evaluation
+        std::cout << "  First step: Evaluation" << std::endl;
+        std::cout << std::endl;
+        VectDouble fitnessScores = evaluatePopulation(population, maxGamesPerGenome);
+        std::cout << std::endl;
+
+        std::cout << "  Second step: Selection" << std::endl;
         // Etape 2 - Selection (20% of the current population)
         BoardDouble selectedGenomes = rouletteWheelSelection(population, fitnessScores, static_cast<int>(population.size() * 0.2));
 
-        std::cout << "Third step: Creation of the next generation" << std::endl;
+        std::cout << std::endl;
+        displayBestGenome(selectedGenomes[0], 1);
+        genomesEvolution.push_back(selectedGenomes[0]);
+
+        if (selectedGenomes.size() > static_cast<size_t>(1))
+        {
+            displayBestGenome(selectedGenomes[1], 2);
+        }
+
+        std::cout << std::endl;
+        std::cout << std::endl;
+        std::cout << "  Third step: Creation of the next generation" << std::endl;
         // Etape 3 - Create Next generation
         BoardDouble nextGeneration = createNextGeneration(selectedGenomes, population.size());
 
-        std::cout << "Fourth step: Mutation of this very new generation" << std::endl;
+        std::cout << std::endl;
+        std::cout << "  Fourth step: Mutation of this very new generation" << std::endl;
         // Etape 4 - mutate next generation
         mutatePopulation(nextGeneration, mutationRate, mutationStrength);
 
-        std::cout << "Fifth step: Replacement of the brand new generation" << std::endl;
+        std::cout << std::endl;
+        std::cout << "  Fifth step: Replacement of the brand new generation" << std::endl;
         // remplacement de la nouvelle gen
         population = std::move(nextGeneration);
 
+        std::cout << std::endl;
+        std::cout << std::endl;
+
         double bestFitness = *std::max_element(fitnessScores.begin(), fitnessScores.end());
-        std::cout << "Génération " << generation << " : Meilleur fitness = " << bestFitness << std::endl;
+        fitnessScoresEvolution.push_back(bestFitness);
+        std::cout << "  Génération " << generation << " : Meilleur fitness = " << bestFitness << std::endl;
+        std::cout << std::endl;
+        std::cout << std::endl;
+    }
+
+    // Display genomes evolution through generations
+    std::cout << std::endl;
+    std::cout << std::endl;
+    for (BoardDouble::size_type i = 0; i < genomesEvolution.size(); i++)
+    {
+        std::cout << "Generation n°" << i
+                  << " - best fitness score: " << fitnessScoresEvolution[i]
+                  << " - genomes : ";
+        for (VectDouble::size_type j = 0; j < genomesEvolution[i].size(); j++)
+        {
+            std::cout << genomesEvolution[i][j] << ", ";
+        }
+        std::cout << std::endl;
     }
 }
 
@@ -91,13 +147,11 @@ double fitnessFunction(const VectDouble &genome, const int &numTrials, const int
     for (int i = 1; i <= numTrials; ++i)
     {
         double score = runAi(genome);
-        std::cout << "      Genome n°" << genomeIndex << " - Test n°" << i << "/" << numTrials;
-        std::cout << " - Score: " << score << std::endl;
+        /* std::cout << "      Genome n°" << genomeIndex << " - Test n°" << i << "/" << numTrials;
+        std::cout << " - Score: " << score << std::endl; */
         totalScore += score;
     }
-    std::cout << std::endl;
     std::cout << "      Genome n°" << genomeIndex << " - Average score on " << numTrials << " tests: " << totalScore / numTrials << std::endl;
-    std::cout << std::endl;
     return totalScore / numTrials;
 }
 
@@ -111,13 +165,13 @@ VectDouble evaluatePopulation(const BoardDouble &population, int numTrials)
         double fitness = fitnessFunction(population[i], numTrials, i + 1);
         fitnessScores[i] = fitness;
     }
-    std::cout << std::endl;
+    /* std::cout << std::endl;
     std::cout << "      All fitness scores :" << std::endl;
     for (VectDouble::size_type i = 0; i < fitnessScores.size(); i++)
     {
         std::cout << "      Genome n°" << i + 1 << " - FitnessScore : " << fitnessScores[i] << std::endl;
     }
-    std::cout << std::endl;
+    std::cout << std::endl; */
     return fitnessScores;
 }
 

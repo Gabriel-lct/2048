@@ -18,6 +18,8 @@ using BoardDouble = std::vector<std::vector<double>>;
 
 double runAi(const VectDouble &genome);
 
+void displayBestGenome(VectDouble &genome, const int &index);
+
 void runGeneticAlgorithm(BoardDouble &population, int &maxGamesPerGenome, int maxGenerations, double mutationRate, double mutationStrength);
 
 // In GA.h

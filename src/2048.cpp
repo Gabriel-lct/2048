@@ -76,18 +76,13 @@ void run_CLI()
 
 void run_AI()
 {
-    VectDouble genome = {
-        1.,
-        1.,
-        1.,
-        1.,
-    };
+    // Max tile in corner - Power of 2 prowimity - number of empty cells - score
+    VectDouble genome = {14.9085, 5.27724, 5.71421, 3.52666};
     clearConsole();
     int N = 4;
     int M = 4;
     int S = 0;
     Board board = genBoard(N, M);
-
 
     while (true)
     {
@@ -102,7 +97,7 @@ void run_AI()
         }
         slide(board, dir, S, c);
         spawn(board, c);
-        //std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
         clearConsole();
     }
 }
@@ -110,12 +105,12 @@ void run_AI()
 void run_GA()
 {
     std::cout << "Running genetic algorithm..." << std::endl;
-    VectDouble genome = {1., 1., 1., 1.};
-    int populationSize = 10;
+    VectDouble genome = {14.9085, 5.27724, 5.71421, 3.52666};
+    int populationSize = 20;
     int maxGamesPerGenome = 2;
     int maxGenerations = 2;
-    double mutationRate = 0.1;
-    double mutationStrength = 0.1;
+    double mutationRate = 0.3;
+    double mutationStrength = 0.4;
 
     BoardDouble firstPopulation = initializePopulationFromGenome(genome, populationSize, mutationRate);
 
@@ -124,10 +119,10 @@ void run_GA()
 
 int main(int argc, char const *argv[])
 {
-    // int DISPLAY_MODE;
-    // Provisionally using only CLI
     run_GA();
-    /* std::cout << "Please select a Game Mode: GUI (1), CLI (2): ";
+    /* int DISPLAY_MODE;
+    // Provisionally using only CLI
+    std::cout << "Please select a Game Mode: GUI (1), CLI (2), AI (3), GA (4): ";
     std::cin >> DISPLAY_MODE;
     if (DISPLAY_MODE == 1)
     {
@@ -136,6 +131,14 @@ int main(int argc, char const *argv[])
     else if (DISPLAY_MODE == 2)
     {
         run_CLI();
+    }
+    else if (DISPLAY_MODE == 3)
+    {
+        run_AI();
+    }
+    else if (DISPLAY_MODE == 4)
+    {
+        run_GA();
     } */
 
     return 0;

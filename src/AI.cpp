@@ -112,6 +112,11 @@ int findBestMove(Board &board, int &score, const int &depth, const VectDouble &g
 
 double evaluateBoard(Board &board, int &score, const VectDouble &genome)
 {
+    if (isGameOver(board))
+    {
+        return -std::numeric_limits<double>::infinity();
+    }
+
     double evaluation = 0.0;
 
     double w_max_tile = genome[0];
