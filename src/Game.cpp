@@ -99,18 +99,25 @@ int takeInput()
 
 bool isGameOver(Board &board)
 {
-    int s;
-    int c;
-    for (int i=0; i<4; i++)
+    for (Board::size_type i=0; i<board.size(); i++)
     {
-        Board cboard = board;
-        slide(cboard, i, s, c);
-        if (cboard != board)
+        for (Vect::size_type j=0; j<board[i].size(); j++)
         {
-            return false;
+            if (board[i][j] == 0)
+            {
+                return false;
+            }
+            if (i > 0 && board[i][j] == board[i-1][j])
+            {
+                return false;
+            }
+            if (j > 0 && board[i][j] == board[i][j-1])
+            {
+                return false;
+            }
         }
     }
-    return true;
+    return false;
 }
 
 void move(Board &board, int &c)

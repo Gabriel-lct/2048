@@ -133,10 +133,10 @@ int findBestMove(Board &board, int &score, const int &depth)
 
 double evaluateBoard(Board &board, int &score)
 {
-
+    // Criteria n°0: FEAR OF DEATH
     if (isGameOver(board))
     {
-        return -std::numeric_limits<double>::infinity();
+        return 0;
     }
 
     double evaluation = 0.0;

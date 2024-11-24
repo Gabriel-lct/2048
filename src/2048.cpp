@@ -83,6 +83,7 @@ void run_AI()
     int S = 0;
     Board board = genBoard(N, M);
 
+
     while (true)
     {
         std::cout << "SCORE: " << S << std::endl;
