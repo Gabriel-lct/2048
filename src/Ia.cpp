@@ -133,6 +133,12 @@ int findBestMove(Board &board, int &score, const int &depth)
 
 double evaluateBoard(Board &board, int &score)
 {
+
+    if (isGameOver(board))
+    {
+        return -std::numeric_limits<double>::infinity();
+    }
+
     double evaluation = 0.0;
 
     // Criteria n°1 - Max tile in corner
@@ -162,7 +168,7 @@ double evaluateBoard(Board &board, int &score)
         }
     }
 
-    evaluation += 1.5 * score;
+    evaluation += 20 * score;
 
     return evaluation;
 }

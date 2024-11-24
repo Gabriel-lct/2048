@@ -99,14 +99,15 @@ int takeInput()
 
 bool isGameOver(Board &board)
 {
-    for (Vect line : board)
+    int s;
+    int c;
+    for (int i=0; i<4; i++)
     {
-        for (int cell : line)
+        Board cboard = board;
+        slide(cboard, i, s, c);
+        if (cboard != board)
         {
-            if (cell == 0)
-            {
-                return false;
-            }
+            return false;
         }
     }
     return true;
