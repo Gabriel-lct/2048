@@ -117,7 +117,7 @@ bool isGameOver(Board &board)
             }
         }
     }
-    return false;
+    return true;
 }
 
 void move(Board &board, int &c)
