@@ -53,7 +53,7 @@ bool boardExists(const BoardVect &boardVect, const Board &board)
     return false;
 }
 
-std::pair<double, int> minimax(Board board, int score, VectDouble &genome, int depth, double alpha, double beta, bool isMaximizingPlayer)
+std::pair<double, int> minimax(Board board, int score, const VectDouble &genome, int depth, double alpha, double beta, bool isMaximizingPlayer)
 {
     if (depth == 0 || isGameOver(board))
     {
@@ -104,13 +104,13 @@ std::pair<double, int> minimax(Board board, int score, VectDouble &genome, int d
     }
 }
 
-int findBestMove(Board &board, int &score, const int &depth, VectDouble &genome)
+int findBestMove(Board &board, int &score, const int &depth, const VectDouble &genome)
 {
     auto [_, bestDir] = minimax(board, score, genome, depth, -std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity(), true);
     return bestDir;
 }
 
-double evaluateBoard(Board &board, int &score, VectDouble &genome)
+double evaluateBoard(Board &board, int &score, const VectDouble &genome)
 {
     double evaluation = 0.0;
 

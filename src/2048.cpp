@@ -108,15 +108,17 @@ void run_AI()
 
 void run_GA()
 {
-    VectDouble genome = {
-        1.,
-        1.,
-        1.,
-        1.,
-    };
-    std::cout << "Running GA..." << std::endl;
-    double average_score = fitnessFunction(genome, 2);
-    std::cout << "Average score: " << average_score << std::endl;
+    std::cout << "Running genetic algorithm..." << std::endl;
+    VectDouble genome = {1., 1., 1., 1.};
+    int populationSize = 10;
+    int maxGamesPerGenome = 2;
+    int maxGenerations = 2;
+    double mutationRate = 0.1;
+    double mutationStrength = 0.1;
+
+    BoardDouble firstPopulation = initializePopulationFromGenome(genome, populationSize, mutationRate);
+
+    runGeneticAlgorithm(firstPopulation, maxGamesPerGenome, maxGenerations, mutationRate, mutationStrength);
 }
 
 int main(int argc, char const *argv[])
