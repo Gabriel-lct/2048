@@ -131,6 +131,12 @@ void check_serpentinage(Board &board, const int &rowIndex, const bool &dir, Vect
 
 double evaluateBoard(Board &board, int &oldScore, int &score, const VectDouble &genome)
 {
+    // Fear of Death
+    if (isGameOver(board))
+    {
+        return -std::numeric_limits<double>::max();
+    }
+
     double evaluation = 0.0;
 
     double w_corner = genome[0];
@@ -161,7 +167,7 @@ double evaluateBoard(Board &board, int &oldScore, int &score, const VectDouble &
     }
 
     // ANCHOR - Criteria N°2 - Serpentinage
-    if (score < 100)
+    if (score < 100000)//stops serpentinage, pour l'instant.
     {
         for (Board::size_type i = 0; i < board.size(); ++i)
         {
@@ -171,11 +177,11 @@ double evaluateBoard(Board &board, int &oldScore, int &score, const VectDouble &
                 {
                     if (i > 0 && board[i - 1][j] != 0)
                     {
-                        evaluation -= w_proximity * std::abs(board[i][j] - board[i - 1][j]); // TODO - Normaliser ici
+                        evaluation -= w_proximity * std::abs(std::log2(board[i][j]) - std::log2(board[i - 1][j])); // TODO - Normaliser ici
                     }
                     if (j > 0 && board[i][j - 1] != 0)
                     {
-                        evaluation -= w_proximity * std::abs(board[i][j] - board[i][j - 1]);
+                        evaluation -= w_proximity * std::abs(std::log2(board[i][j]) - std::log2(board[i][j - 1]));
                     }
                 }
             }

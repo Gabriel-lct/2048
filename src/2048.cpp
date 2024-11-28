@@ -52,7 +52,7 @@ void run_CLI()
 void run_AI()
 {
     // Max tile in corner - Power of 2 prowimity - number of empty tiles - score
-    VectDouble genome = {14.9085, 5.27724, 5.71421, 3.52666};
+    VectDouble genome = {1, 1, 1, 1, 1};
     clearConsole();
     int N = 4;
     int M = 4;
@@ -81,11 +81,11 @@ void run_GA()
 {
     std::cout << "Running genetic algorithm..." << std::endl;
     VectDouble genome = {1, 1, 1, 1, 1};
-    int populationSize = 100;
+    int populationSize = 50;
     int maxGamesPerGenome = 50;
     int maxGenerations = 200;
-    double mutationRate = 0.15;
-    double mutationStrength = 0.1;
+    double mutationRate = 0.2;
+    double mutationStrength = 0.3;
 
     BoardDouble firstPopulation = initializePopulationFromGenome(genome, populationSize, mutationRate);
 
