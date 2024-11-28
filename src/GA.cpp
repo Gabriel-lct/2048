@@ -87,10 +87,9 @@ void runGeneticAlgorithm(BoardDouble &population, int &maxGamesPerGenome, int ma
 
         std::cout << std::endl;
         std::cout << std::endl;
-
-        double bestFitness = *std::max_element(fitnessScores.begin(), fitnessScores.end());
-        fitnessScoresEvolution.push_back(bestFitness);
-        std::cout << "  Génération " << generation << " : Meilleur fitness = " << bestFitness << std::endl;
+        double averageFitness = vectorAverage(fitnessScores);
+        fitnessScoresEvolution.push_back(averageFitness);
+        std::cout << "  Génération " << generation << " : Fitness moyen = " << averageFitness << std::endl;
         std::cout << std::endl;
         std::cout << std::endl;
     }
@@ -101,7 +100,7 @@ void runGeneticAlgorithm(BoardDouble &population, int &maxGamesPerGenome, int ma
     for (BoardDouble::size_type i = 0; i < genomesEvolution.size(); i++)
     {
         std::cout << "Generation n°" << i
-                  << " - best fitness score: " << fitnessScoresEvolution[i]
+                  << " - average fitness score: " << fitnessScoresEvolution[i]
                   << " - genomes : ";
         for (VectDouble::size_type j = 0; j < genomesEvolution[i].size(); j++)
         {
@@ -177,44 +176,43 @@ VectDouble evaluatePopulation(const BoardDouble &population, int numTrials)
 
 BoardDouble rouletteWheelSelection(const BoardDouble &population, VectDouble &fitnessScores, int numSelection)
 {
-    double totalFitness = 0;
-    for (double fitness : fitnessScores)
-    {
-        totalFitness += fitness;
-    }
-
-    // Normalize the fitness scores to probabilities
-    VectDouble probabilities;
-    for (double fitness : fitnessScores)
-    {
-        probabilities.push_back(fitness / totalFitness);
-    }
-
-    VectDouble cumulativeProbabilities;
-    double cumulative = 0.0;
-    for (double probability : probabilities)
-    {
-        cumulative += probability;
-        cumulativeProbabilities.push_back(cumulative);
-    }
-
+    double probability = 0.2;
     // Select genomes
-    std::vector<std::vector<double>> selectedGenomes;
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<> dis(0.0, 1.0);
+    BoardDouble selectedGenomes;
+    
 
     while (selectedGenomes.size() < static_cast<size_t>(numSelection))
     {
-        double randomValue = dis(gen);
-        for (size_t j = 0; j < cumulativeProbabilities.size(); j++)
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_real_distribution<> dis(0.0, 1.0);
+        double p = dis(gen);
+        std::cout << p << std::endl;
+        
+        if (p < probability)
         {
-            if (randomValue <= cumulativeProbabilities[j])
-            {
-                selectedGenomes.push_back(population[j]);
-                break;
-            }
+            std::uniform_int_distribution<> dis2(0, selectedGenomes.size() - 1);
+            int index = dis2(gen);
+            
+            selectedGenomes.push_back(population[index]);
+
+            //remove from fitnessScores & population
+            fitnessScores.erase(fitnessScores.begin() + index);
+            population.erase(population.begin() + index);
+
+            fitnessScores.remove(index);
+        } else { //TODO - review code
+            max = std::max_element(fitnessScores)
+            auto maxIt = std::max_element(fitnessScores.begin(), fitnessScores.end());
+            int index = std::distance(fitnessScores.begin(), maxIt);
+            selectedGenomes.push_back(population[index]);
+            fitnessScores.erase(fitnessScores.begin() + index);
+            population.erase(population.begin() + index);
         }
+
+    }
+
+         
     }
 
     return selectedGenomes;

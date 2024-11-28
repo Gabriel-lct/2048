@@ -20,7 +20,7 @@ bool boardExists(const BoardVect &boardVect, const Board &board);
 std::pair<double, int> minimax(Board board, int oldScore, int score, const VectDouble &genome, int depth, double alpha, double beta, bool isMaximizingPlayer);
 
 int findBestMove(Board &board, int &score, const int &depth, const VectDouble &genome);
-double evaluateBoard(Board &board, int &oldScore, int &score /*, const VectDouble &genome */);
+double evaluateBoard(Board &board, int &oldScore, int &score, const VectDouble &genome);
 
 /* dir:
 - true = -->

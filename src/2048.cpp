@@ -80,12 +80,12 @@ void run_AI()
 void run_GA()
 {
     std::cout << "Running genetic algorithm..." << std::endl;
-    VectDouble genome = {14.9085, 5.27724, 5.71421, 3.52666};
+    VectDouble genome = {0.725651, 1.03878, 0.918481, 0.948858, 0.968119};
     int populationSize = 20;
-    int maxGamesPerGenome = 2;
-    int maxGenerations = 2;
+    int maxGamesPerGenome = 50;
+    int maxGenerations = 20;
     double mutationRate = 0.3;
-    double mutationStrength = 0.4;
+    double mutationStrength = 0.2;
 
     BoardDouble firstPopulation = initializePopulationFromGenome(genome, populationSize, mutationRate);
 
@@ -94,7 +94,7 @@ void run_GA()
 
 int main(int argc, char const *argv[])
 {
-    run_AI();
+    //run_AI();
     /* Board board =
 
         {
@@ -105,7 +105,7 @@ int main(int argc, char const *argv[])
                 {256, 4,0,0},
             }};
     evaluateBoard(board, 128, 12); */
-    /* int DISPLAY_MODE;
+    int DISPLAY_MODE;
     // Provisionally using only CLI
     std::cout << "Please select a Game Mode: GUI (1), CLI (2), AI (3), GA (4): ";
     std::cin >> DISPLAY_MODE;
@@ -120,7 +120,7 @@ int main(int argc, char const *argv[])
     else if (DISPLAY_MODE == 4)
     {
         run_GA();
-    } */
+    }
 
     return 0;
 }

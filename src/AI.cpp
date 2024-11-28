@@ -41,7 +41,7 @@ std::pair<double, int> minimax(Board board, int oldScore, int score, const VectD
 {
     if (depth == 0 || isGameOver(board))
     {
-        return {evaluateBoard(board, oldScore, score), -1};
+        return {evaluateBoard(board, oldScore, score, genome), -1};
     }
 
     if (isMaximizingPlayer)
@@ -129,15 +129,15 @@ void check_serpentinage(Board &board, const int &rowIndex, const bool &dir, Vect
     }
 }
 
-double evaluateBoard(Board &board, int &oldScore, int &score /*, const VectDouble &genome */)
+double evaluateBoard(Board &board, int &oldScore, int &score, const VectDouble &genome)
 {
     double evaluation = 0.0;
 
-    double w_corner = 3;
-    double w_proximity = 2;
-    double w_serpentinage = 30;
-    double w_empty = 40;
-    double w_score = 6;
+    double w_corner = genome[0];
+    double w_proximity = genome[1];
+    double w_serpentinage = genome[2];
+    double w_empty = genome[3];
+    double w_score = genome[4];
 
     int numberTiles = getNumberTiles(board);
     Vect boardValues = getMatrixValues(board);

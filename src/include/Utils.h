@@ -6,6 +6,7 @@
 
 using Vect = std::vector<int>;
 using Board = std::vector<std::vector<int>>;
+using VectDouble = std::vector<double>;
 
 int countDigits(int n);
 
@@ -28,5 +29,7 @@ int maxScoreGain(const Vect &values);
 int getNumberTiles(Board &board);
 
 int numberEmptyTiles(Board &board);
+
+double vectorAverage(VectDouble &vect);
 
 #endif

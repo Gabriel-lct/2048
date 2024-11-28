@@ -155,3 +155,13 @@ int numberEmptyTiles(Board &board)
     }
     return numberEmptyTiles;
 }
+
+double vectorAverage(VectDouble &vect)
+{
+    double a = 0;
+    for (auto c: vect)
+    {
+        a += c;
+    }
+    return a/vect.size();
+}

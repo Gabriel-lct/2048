@@ -26,14 +26,23 @@ void initSDL(SDL_Window* &window, SDL_Renderer* &renderer, TTF_Font* &font)
     TTF_Init();
     window = SDL_CreateWindow("2048", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, W, H, SDL_WINDOW_SHOWN);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED); 
-    font = TTF_OpenFont("/fonts/ClearSans/ClearSans-Bold.ttf", 5);
+    font = TTF_OpenFont("/fonts/ClearSans/ClearSans-Bold.ttf", 24);
+    if (!font) {
+        std::cerr << "TTF_OpenFont Error: " << TTF_GetError() << std::endl;
+    }
 }
 
 SDL_Texture* getTextTexture(const std::string &text, TTF_Font* &font, SDL_Color color, SDL_Renderer* &renderer)
 {
     SDL_Surface *textSurface = TTF_RenderText_Blended(font, text.c_str(), color);
+    if (!textSurface) {
+        SDL_Log("TTF_RenderText_Blended Error: %s", TTF_GetError());
+    }
     SDL_Texture *textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-    SDL_FreeSurface(textSurface);
+    if (!textTexture) {
+        SDL_Log("SDL_CreateTextureFromSurface Error: %s", SDL_GetError());
+    }
+    //SDL_FreeSurface(textSurface);
     return textTexture;
 }
 
@@ -60,12 +69,13 @@ void renderBoard(Board &board, SDL_Renderer* &renderer, TTF_Font* &font)
             SDL_RenderFillRect(renderer, &tile);
 
             // Tile text
-            SDL_Color black = {0, 0, 0, 0};
+            SDL_Color black = {0, 0, 0, 255};
             SDL_Texture *textTexture = getTextTexture(std::to_string(tileValue), font, black, renderer);
             int textWidth, textHeight;
             SDL_QueryTexture(textTexture, nullptr, nullptr, &textWidth, &textHeight);
 
-            SDL_Rect destRect = {separation * (j+1) + tileSize*j, separation*(i+1) + tileSize*i, textWidth, textHeight};
+            //SDL_Rect destRect = {separation * (j+1) + tileSize*j, separation*(i+1) + tileSize*i, textWidth, textHeight};
+            SDL_Rect destRect = {W/2, H/2, textWidth, textHeight};
             SDL_RenderCopy(renderer, textTexture, nullptr, &destRect);
 
             SDL_DestroyTexture(textTexture);
