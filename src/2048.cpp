@@ -3,7 +3,7 @@
 #include "./include/Utils.h"
 #include "./include/AI.h"
 #include "./include/GA.h"
-//#include "./include/GUI.h"
+// #include "./include/GUI.h"
 
 #include <iostream>
 #include <stdlib.h>
@@ -15,7 +15,7 @@
 {
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
-    
+
 
     const int FPS = 60;
     const int frameDelay = 1000 / FPS;
@@ -94,17 +94,7 @@ void run_GA()
 
 int main(int argc, char const *argv[])
 {
-    //run_AI();
-    /* Board board =
-
-        {
-            {
-                {32, 16, 0, 0},
-                {64, 8, 3, 0},
-                {128, 8, 2, 4},
-                {256, 4,0,0},
-            }};
-    evaluateBoard(board, 128, 12); */
+    // run_AI();
     int DISPLAY_MODE;
     // Provisionally using only CLI
     std::cout << "Please select a Game Mode: GUI (1), CLI (2), AI (3), GA (4): ";

@@ -40,6 +40,12 @@ void displayBestGenome(VectDouble &genome, const int &index)
     std::cout << std::endl;
 }
 
+int getBestGenome(VectDouble &fitnessScores)
+{
+    auto maxIt = std::max_element(fitnessScores.begin(), fitnessScores.end());
+    return std::distance(fitnessScores.begin(), maxIt);
+}
+
 void runGeneticAlgorithm(BoardDouble &population, int &maxGamesPerGenome, int maxGenerations, double mutationRate, double mutationStrength)
 {
     BoardDouble genomesEvolution;
@@ -61,13 +67,9 @@ void runGeneticAlgorithm(BoardDouble &population, int &maxGamesPerGenome, int ma
         BoardDouble selectedGenomes = rouletteWheelSelection(population, fitnessScores, static_cast<int>(population.size() * 0.2));
 
         std::cout << std::endl;
-        displayBestGenome(selectedGenomes[0], 1);
-        genomesEvolution.push_back(selectedGenomes[0]);
-
-        if (selectedGenomes.size() > static_cast<size_t>(1))
-        {
-            displayBestGenome(selectedGenomes[1], 2);
-        }
+        VectDouble bestGenome = population[getBestGenome(fitnessScores)];
+        displayBestGenome(bestGenome, 1);
+        genomesEvolution.push_back(bestGenome);
 
         std::cout << std::endl;
         std::cout << std::endl;
@@ -122,12 +124,12 @@ BoardDouble initializePopulationFromGenome(const VectDouble &firstGenome, int po
 
     for (int i = 0; i < populationSize; ++i)
     {
-        VectDouble genome = firstGenome; // Start with the basic genome
+        VectDouble genome = firstGenome;
         for (double &weight : genome)
         {
             weight += dis(gen); // Add random variation to each weight
         }
-        population.push_back(genome); // Add genome to the population
+        population.push_back(genome);
     }
 
     return population;
@@ -146,8 +148,6 @@ double fitnessFunction(const VectDouble &genome, const int &numTrials, const int
     for (int i = 1; i <= numTrials; ++i)
     {
         double score = runAi(genome);
-        /* std::cout << "      Genome n°" << genomeIndex << " - Test n°" << i << "/" << numTrials;
-        std::cout << " - Score: " << score << std::endl; */
         totalScore += score;
     }
     std::cout << "      Genome n°" << genomeIndex << " - Average score on " << numTrials << " tests: " << totalScore / numTrials << std::endl;
@@ -164,22 +164,14 @@ VectDouble evaluatePopulation(const BoardDouble &population, int numTrials)
         double fitness = fitnessFunction(population[i], numTrials, i + 1);
         fitnessScores[i] = fitness;
     }
-    /* std::cout << std::endl;
-    std::cout << "      All fitness scores :" << std::endl;
-    for (VectDouble::size_type i = 0; i < fitnessScores.size(); i++)
-    {
-        std::cout << "      Genome n°" << i + 1 << " - FitnessScore : " << fitnessScores[i] << std::endl;
-    }
-    std::cout << std::endl; */
     return fitnessScores;
 }
 
-BoardDouble rouletteWheelSelection(const BoardDouble &population, VectDouble &fitnessScores, int numSelection)
+BoardDouble rouletteWheelSelection(const BoardDouble population, VectDouble fitnessScores, int numSelection)
 {
     double probability = 0.2;
     // Select genomes
     BoardDouble selectedGenomes;
-    
 
     while (selectedGenomes.size() < static_cast<size_t>(numSelection))
     {
@@ -188,31 +180,23 @@ BoardDouble rouletteWheelSelection(const BoardDouble &population, VectDouble &fi
         std::uniform_real_distribution<> dis(0.0, 1.0);
         double p = dis(gen);
         std::cout << p << std::endl;
-        
+
+        int index = 0;
         if (p < probability)
         {
             std::uniform_int_distribution<> dis2(0, selectedGenomes.size() - 1);
-            int index = dis2(gen);
-            
-            selectedGenomes.push_back(population[index]);
+            index = dis2(gen);
 
-            //remove from fitnessScores & population
-            fitnessScores.erase(fitnessScores.begin() + index);
-            population.erase(population.begin() + index);
-
-            fitnessScores.remove(index);
-        } else { //TODO - review code
-            max = std::max_element(fitnessScores)
-            auto maxIt = std::max_element(fitnessScores.begin(), fitnessScores.end());
-            int index = std::distance(fitnessScores.begin(), maxIt);
             selectedGenomes.push_back(population[index]);
-            fitnessScores.erase(fitnessScores.begin() + index);
-            population.erase(population.begin() + index);
+        }
+        else
+        {
+            index = getBestGenome(fitnessScores);
+            selectedGenomes.push_back(population[index]);
         }
 
-    }
-
-         
+        fitnessScores.erase(fitnessScores.begin() + index);
+        population.erase(population.begin() + index);
     }
 
     return selectedGenomes;

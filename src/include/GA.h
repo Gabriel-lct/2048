@@ -20,6 +20,8 @@ double runAi(const VectDouble &genome);
 
 void displayBestGenome(VectDouble &genome, const int &index);
 
+int getBestGenome(VectDouble &fitnessScores);
+
 void runGeneticAlgorithm(BoardDouble &population, int &maxGamesPerGenome, int maxGenerations, double mutationRate, double mutationStrength);
 
 // In GA.h
@@ -29,7 +31,7 @@ double fitnessFunction(const VectDouble &genome, const int &numTrials, const int
 
 VectDouble evaluatePopulation(const BoardDouble &population, int numTrials);
 
-BoardDouble rouletteWheelSelection(const BoardDouble &population, VectDouble &fitnessScores, int numSelection);
+BoardDouble rouletteWheelSelection(const BoardDouble population, VectDouble fitnessScores, int numSelection);
 
 GenomePair singlePointCrossover(const VectDouble &parent1, const VectDouble &parent2);
 
