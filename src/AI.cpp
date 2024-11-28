@@ -41,7 +41,7 @@ std::pair<double, int> minimax(Board board, int oldScore, int score, const VectD
 {
     if (depth == 0 || isGameOver(board))
     {
-        return {evaluateBoard(board, oldScore, score/*, genome */), -1};
+        return {evaluateBoard(board, oldScore, score), -1};
     }
 
     if (isMaximizingPlayer)
@@ -93,9 +93,9 @@ int findBestMove(Board &board, int &score, const int &depth, const VectDouble &g
 {
     int empties = numberEmptyTiles(board);
     int ndepth = depth;
-    if (empties > pow(board.size(), 2)/4)
+    if (empties > pow(board.size(), 2) / 4)
     {
-        ndepth = depth/2;
+        ndepth = depth / 2;
     }
     auto [_, bestDir] = minimax(board, score, score, genome, ndepth, -std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity(), true);
     return bestDir;
@@ -133,33 +133,36 @@ double evaluateBoard(Board &board, int &oldScore, int &score /*, const VectDoubl
 {
     double evaluation = 0.0;
 
-    double w_corner = 1;
-    double w_proximity = 1;
-    double w_serpentinage = 1;
-    /* double w_empty = 1;
-    double w_score = 1; */
+    double w_corner = 3;
+    double w_proximity = 2;
+    double w_serpentinage = 30;
+    double w_empty = 40;
+    double w_score = 6;
 
     int numberTiles = getNumberTiles(board);
+    Vect boardValues = getMatrixValues(board);
 
-        if (isGameOver(board))
+    if (isGameOver(board))
     {
         return -std::numeric_limits<double>::max();
     }
 
-    //ANCHOR - Criteria n°1 - Max tile in corner a.k.a PG au coin
+    // ANCHOR - Criteria n°1 - Max tile in corner a.k.a PG au coin
     Vect biggestIndex = biggestTile(board);
     Vect::size_type maxX = biggestIndex[0];
     Vect::size_type maxY = biggestIndex[1];
 
     bool inCorner = false;
 
-    if ((maxX == 0 && (maxY == 0 || maxY == board[maxX].size() - 1)) || (maxX == board.size() - 1 && (maxY == 0 || maxY == board[maxX].size() - 1))){
+    if ((maxX == 0 && (maxY == 0 || maxY == board[maxX].size() - 1)) || (maxX == board.size() - 1 && (maxY == 0 || maxY == board[maxX].size() - 1)))
+    {
         inCorner = true;
         evaluation += w_corner;
     }
-    
-    //ANCHOR - Criteria N°2 - Serpentinage
-    if (score < 10000) {
+
+    // ANCHOR - Criteria N°2 - Serpentinage
+    if (score < 100)
+    {
         for (Board::size_type i = 0; i < board.size(); ++i)
         {
             for (Vect::size_type j = 0; j < board[i].size(); ++j)
@@ -168,7 +171,7 @@ double evaluateBoard(Board &board, int &oldScore, int &score /*, const VectDoubl
                 {
                     if (i > 0 && board[i - 1][j] != 0)
                     {
-                        evaluation -= w_proximity * std::abs(board[i][j] - board[i - 1][j]); //TODO - Normaliser ici
+                        evaluation -= w_proximity * std::abs(board[i][j] - board[i - 1][j]); // TODO - Normaliser ici
                     }
                     if (j > 0 && board[i][j - 1] != 0)
                     {
@@ -177,8 +180,11 @@ double evaluateBoard(Board &board, int &oldScore, int &score /*, const VectDoubl
                 }
             }
         }
-    } else {
-        if(inCorner) {
+    }
+    else
+    {
+        if (inCorner)
+        {
             Board boardCopy = board;
             if (maxX == boardCopy.size() - 1 && maxY == 0)
             {
@@ -198,22 +204,22 @@ double evaluateBoard(Board &board, int &oldScore, int &score /*, const VectDoubl
                 transposeMatrix(boardCopy);
             }
 
-            Vect boardValues = getMatrixValues(boardCopy);
+            Vect boardValuesCopy = boardValues;
             int inRow = 0;
-            check_serpentinage(boardCopy, 0, true, boardValues, inRow);
+            check_serpentinage(boardCopy, 0, true, boardValuesCopy, inRow);
 
             score += w_serpentinage * inRow / numberTiles;
         }
     }
 
-
     // Criteria n°3 : number of empty tiles
-    score += numberEmptyTiles(board) / numberTiles;
+    score += numberEmptyTiles(board) / numberTiles * w_empty;
 
     // Criteria n°4 : score
-    score += (score - oldScore) / maxScoreGain(getMatrixValues(board));
-
+    int maxScore = maxScoreGain(boardValues);
+    if (maxScore != 0)
+    {
+        score += (score - oldScore) / maxScore * w_score;
+    }
     return evaluation;
 }
-
-
