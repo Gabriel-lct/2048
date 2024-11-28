@@ -80,12 +80,12 @@ void run_AI()
 void run_GA()
 {
     std::cout << "Running genetic algorithm..." << std::endl;
-    VectDouble genome = {0.725651, 1.03878, 0.918481, 0.948858, 0.968119};
-    int populationSize = 20;
+    VectDouble genome = {1, 1, 1, 1, 1};
+    int populationSize = 100;
     int maxGamesPerGenome = 50;
-    int maxGenerations = 20;
-    double mutationRate = 0.3;
-    double mutationStrength = 0.2;
+    int maxGenerations = 200;
+    double mutationRate = 0.15;
+    double mutationStrength = 0.1;
 
     BoardDouble firstPopulation = initializePopulationFromGenome(genome, populationSize, mutationRate);
 

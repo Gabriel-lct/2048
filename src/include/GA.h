@@ -31,7 +31,7 @@ double fitnessFunction(const VectDouble &genome, const int &numTrials, const int
 
 VectDouble evaluatePopulation(const BoardDouble &population, int numTrials);
 
-BoardDouble rouletteWheelSelection(const BoardDouble population, VectDouble fitnessScores, int numSelection);
+BoardDouble rouletteWheelSelection(BoardDouble population, VectDouble fitnessScores, int numSelection);
 
 GenomePair singlePointCrossover(const VectDouble &parent1, const VectDouble &parent2);
 

@@ -167,9 +167,9 @@ VectDouble evaluatePopulation(const BoardDouble &population, int numTrials)
     return fitnessScores;
 }
 
-BoardDouble rouletteWheelSelection(const BoardDouble population, VectDouble fitnessScores, int numSelection)
+BoardDouble rouletteWheelSelection(BoardDouble population, VectDouble fitnessScores, int numSelection)
 {
-    double probability = 0.2;
+    double probability = 0.25;
     // Select genomes
     BoardDouble selectedGenomes;
 
@@ -179,12 +179,11 @@ BoardDouble rouletteWheelSelection(const BoardDouble population, VectDouble fitn
         std::mt19937 gen(rd());
         std::uniform_real_distribution<> dis(0.0, 1.0);
         double p = dis(gen);
-        std::cout << p << std::endl;
 
         int index = 0;
         if (p < probability)
         {
-            std::uniform_int_distribution<> dis2(0, selectedGenomes.size() - 1);
+            std::uniform_int_distribution<> dis2(0, population.size() - 1);
             index = dis2(gen);
 
             selectedGenomes.push_back(population[index]);
