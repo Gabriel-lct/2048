@@ -3,22 +3,6 @@
 #include "./include/Game.h"
 #include "./include/Display.h"
 
-int numberEmptyCells(Board &board)
-{
-    int numberEmptyCells;
-    for (auto &row : board)
-    {
-        for (auto &cell : row)
-        {
-            if (cell == 0)
-            {
-                numberEmptyCells++;
-            }
-        }
-    }
-    return numberEmptyCells;
-}
-
 BoardVect generatePossibleSpawns(Board &board)
 {
     BoardVect possibilities;
@@ -53,11 +37,11 @@ bool boardExists(const BoardVect &boardVect, const Board &board)
     return false;
 }
 
-std::pair<double, int> minimax(Board board, int score, const VectDouble &genome, int depth, double alpha, double beta, bool isMaximizingPlayer)
+std::pair<double, int> minimax(Board board, int oldScore, int score, const VectDouble &genome, int depth, double alpha, double beta, bool isMaximizingPlayer)
 {
     if (depth == 0 || isGameOver(board))
     {
-        return {evaluateBoard(board, score, genome), -1};
+        return {evaluateBoard(board, oldScore, score/*, genome */), -1};
     }
 
     if (isMaximizingPlayer)
@@ -68,12 +52,13 @@ std::pair<double, int> minimax(Board board, int score, const VectDouble &genome,
         {
             int c = 0;
             Board dupliBoard = board;
-            slide(dupliBoard, dir, score, c);
+            int newScore = score;
+            slide(dupliBoard, dir, newScore, c);
             if (dupliBoard == board)
             {
                 continue;
             }
-            auto [eval, _] = minimax(dupliBoard, score, genome, depth - 1, alpha, beta, false);
+            auto [eval, _] = minimax(dupliBoard, score, newScore, genome, depth - 1, alpha, beta, false);
             if (eval > maxEval)
             {
                 maxEval = eval;
@@ -92,7 +77,7 @@ std::pair<double, int> minimax(Board board, int score, const VectDouble &genome,
         double minEval = std::numeric_limits<double>::infinity();
         for (Board &childBoard : generatePossibleSpawns(board))
         {
-            auto [eval, _] = minimax(childBoard, score, genome, depth - 1, alpha, beta, true);
+            auto [eval, _] = minimax(childBoard, oldScore, score, genome, depth - 1, alpha, beta, true);
             minEval = std::min(minEval, eval);
             beta = std::min(beta, eval);
             if (beta <= alpha)
@@ -106,57 +91,129 @@ std::pair<double, int> minimax(Board board, int score, const VectDouble &genome,
 
 int findBestMove(Board &board, int &score, const int &depth, const VectDouble &genome)
 {
-    auto [_, bestDir] = minimax(board, score, genome, depth, -std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity(), true);
+    int empties = numberEmptyTiles(board);
+    int ndepth = depth;
+    if (empties > pow(board.size(), 2)/4)
+    {
+        ndepth = depth/2;
+    }
+    auto [_, bestDir] = minimax(board, score, score, genome, ndepth, -std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity(), true);
     return bestDir;
 }
 
-double evaluateBoard(Board &board, int &score, const VectDouble &genome)
+void check_serpentinage(Board &board, const int &rowIndex, const bool &dir, Vect &boardValues, int &inRow)
 {
-    if (isGameOver(board))
+    Vect row = board[rowIndex];
+    bool strike = true;
+    if (not dir)
     {
-        return -std::numeric_limits<double>::infinity();
+        std::reverse(row.begin(), row.end());
     }
 
+    for (Vect::size_type i = 0; i < row.size(); i++)
+    {
+        if (row[i] == boardValues[0])
+        {
+            inRow += 1;
+            boardValues.erase(boardValues.begin());
+        }
+        else
+        {
+            strike = false;
+            break;
+        }
+    }
+    if (strike && rowIndex < static_cast<int>(board.size()) - 1)
+    {
+        check_serpentinage(board, rowIndex + 1, not dir, boardValues, inRow);
+    }
+}
+
+double evaluateBoard(Board &board, int &oldScore, int &score /*, const VectDouble &genome */)
+{
     double evaluation = 0.0;
 
-    double w_max_tile = genome[0];
-    double w_proximity = genome[1];
-    double w_empty = genome[2];
-    double w_score = genome[3];
+    double w_corner = 1;
+    double w_proximity = 1;
+    double w_serpentinage = 1;
+    /* double w_empty = 1;
+    double w_score = 1; */
 
-    // Criteria n°1 - Max tile in corner
-    int maxTile = biggestTile(board);
+    int numberTiles = getNumberTiles(board);
 
-    if (board[0][0] == maxTile || board[0][board.size() - 1] == maxTile || board[board.size() - 1][0] == maxTile || board[board.size() - 1][board.size() - 1] == maxTile)
+        if (isGameOver(board))
     {
-        evaluation += w_max_tile * maxTile;
+        return -std::numeric_limits<double>::max();
     }
 
-    // Criteria n°2 : power of 2 proximity
-    for (Board::size_type i = 0; i < board.size(); ++i)
-    {
-        for (Vect::size_type j = 0; j < board[i].size(); ++j)
+    //ANCHOR - Criteria n°1 - Max tile in corner a.k.a PG au coin
+    Vect biggestIndex = biggestTile(board);
+    Vect::size_type maxX = biggestIndex[0];
+    Vect::size_type maxY = biggestIndex[1];
+
+    bool inCorner = false;
+
+    if ((maxX == 0 && (maxY == 0 || maxY == board[maxX].size() - 1)) || (maxX == board.size() - 1 && (maxY == 0 || maxY == board[maxX].size() - 1))){
+        inCorner = true;
+        evaluation += w_corner;
+    }
+    
+    //ANCHOR - Criteria N°2 - Serpentinage
+    if (score < 10000) {
+        for (Board::size_type i = 0; i < board.size(); ++i)
         {
-            if (board[i][j] != 0)
+            for (Vect::size_type j = 0; j < board[i].size(); ++j)
             {
-                if (i > 0 && board[i - 1][j] != 0)
+                if (board[i][j] != 0)
                 {
-                    evaluation -= w_proximity * std::abs(board[i][j] - board[i - 1][j]);
-                }
-                if (j > 0 && board[i][j - 1] != 0)
-                {
-                    evaluation -= w_proximity * std::abs(board[i][j] - board[i][j - 1]);
+                    if (i > 0 && board[i - 1][j] != 0)
+                    {
+                        evaluation -= w_proximity * std::abs(board[i][j] - board[i - 1][j]); //TODO - Normaliser ici
+                    }
+                    if (j > 0 && board[i][j - 1] != 0)
+                    {
+                        evaluation -= w_proximity * std::abs(board[i][j] - board[i][j - 1]);
+                    }
                 }
             }
         }
+    } else {
+        if(inCorner) {
+            Board boardCopy = board;
+            if (maxX == boardCopy.size() - 1 && maxY == 0)
+            {
+                rotateMatrix(boardCopy, 1);
+            }
+            else if (maxX == boardCopy.size() - 1 && maxY == boardCopy.size() - 1)
+            {
+                rotateMatrix(boardCopy, 2);
+            }
+            else if (maxX == 0 && maxY == boardCopy.size() - 1)
+            {
+                rotateMatrix(boardCopy, 3);
+            }
+
+            if (boardCopy[1][0] > boardCopy[0][1])
+            {
+                transposeMatrix(boardCopy);
+            }
+
+            Vect boardValues = getMatrixValues(boardCopy);
+            int inRow = 0;
+            check_serpentinage(boardCopy, 0, true, boardValues, inRow);
+
+            score += w_serpentinage * inRow / numberTiles;
+        }
     }
 
-    // Criteria n°3 : number of empty cells
-    int emptyCells = numberEmptyCells(board);
-    evaluation += w_empty * emptyCells;
+
+    // Criteria n°3 : number of empty tiles
+    score += numberEmptyTiles(board) / numberTiles;
 
     // Criteria n°4 : score
-    evaluation += w_score * score;
+    score += (score - oldScore) / maxScoreGain(getMatrixValues(board));
 
     return evaluation;
 }
+
+

@@ -3,7 +3,7 @@
 #include "./include/Utils.h"
 #include "./include/AI.h"
 #include "./include/GA.h"
-#include "./include/GUI.h"
+//#include "./include/GUI.h"
 
 #include <iostream>
 #include <stdlib.h>
@@ -11,40 +11,15 @@
 #include <thread>
 #include <chrono>
 
-void run_GUI()
+/* void run_GUI()
 {
-    GUI *gui = nullptr;
+    SDL_Window *window = NULL;
+    SDL_Renderer *renderer = NULL;
+    
 
     const int FPS = 60;
     const int frameDelay = 1000 / FPS;
-
-    Uint32 frameStart;
-    int frameTime;
-
-    gui = new GUI();
-
-    // Initialize the gui with a title, position, size, and fullscreen option
-    gui->init("2048 Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, false);
-
-    while (gui->running())
-    {
-        // Initialize the Time before any instructions
-        frameStart = SDL_GetTicks();
-
-        gui->handleEvents();
-        gui->update();
-        gui->render();
-
-        // Delay the frame to reach the wanted frameTime
-        frameTime = SDL_GetTicks() - frameStart;
-        if (frameDelay > frameTime)
-        {
-            SDL_Delay(frameDelay - frameTime);
-        }
-    }
-
-    gui->clean();
-}
+} */
 
 void run_CLI()
 {
@@ -76,7 +51,7 @@ void run_CLI()
 
 void run_AI()
 {
-    // Max tile in corner - Power of 2 prowimity - number of empty cells - score
+    // Max tile in corner - Power of 2 prowimity - number of empty tiles - score
     VectDouble genome = {14.9085, 5.27724, 5.71421, 3.52666};
     clearConsole();
     int N = 4;
@@ -119,16 +94,21 @@ void run_GA()
 
 int main(int argc, char const *argv[])
 {
-    run_GA();
-    /* int DISPLAY_MODE;
+    /* Board board =
+
+        {
+            {
+                {32, 16, 0, 0},
+                {64, 8, 3, 0},
+                {128, 8, 2, 4},
+                {256, 4,0,0},
+            }};
+    evaluateBoard(board, 128, 12); */
+    int DISPLAY_MODE;
     // Provisionally using only CLI
     std::cout << "Please select a Game Mode: GUI (1), CLI (2), AI (3), GA (4): ";
     std::cin >> DISPLAY_MODE;
-    if (DISPLAY_MODE == 1)
-    {
-        run_GUI();
-    }
-    else if (DISPLAY_MODE == 2)
+    if (DISPLAY_MODE == 2)
     {
         run_CLI();
     }
@@ -139,7 +119,7 @@ int main(int argc, char const *argv[])
     else if (DISPLAY_MODE == 4)
     {
         run_GA();
-    } */
+    }
 
     return 0;
 }

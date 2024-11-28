@@ -1,6 +1,7 @@
 #include "./include/Utils.h"
 #include <cmath>
 #include <vector>
+#include <algorithm>
 #include <map>
 
 using Vect = std::vector<int>;
@@ -24,17 +25,24 @@ int countDigits(int n)
  * @return int The largest element in the board.
  */
 
-int biggestTile(Board &board)
+Vect biggestTile(Board &board)
 {
     int biggest = board[0][0];
-    for (const auto &line : board)
+    int x = 0;
+    int y =0;
+    for (Board::size_type i=0; i<board.size(); i++)
     {
-        for (const auto &cell : line)
+        for (Vect::size_type j=0; j<board[i].size(); j++)
         {
-            biggest = std::max(biggest, cell);
+            int tile = board[i][j];
+            if (tile >= biggest){
+                biggest = tile;
+                x = i;
+                y = j;
+            }
         }
     }
-    return biggest;
+    return {x, y};
 }
 
 void clearConsole()
@@ -45,47 +53,38 @@ void clearConsole()
     }
 }
 
-void reverseVector(Vect &v)
-{
-    int s = v.size();
-    for (int i = 0; i < s / 2; i++)
-    {
-        int o = v[i];
-        v[i] = v[s - i - 1];
-        v[s - i - 1] = o;
+void transposeMatrix(Board &matrix) {
+    int n = matrix.size();
+    for (int i = 0; i < n; ++i) {
+        for (int j = i + 1; j < n; ++j) {
+            std::swap(matrix[i][j], matrix[j][i]);
+        }
     }
 }
 
-void rotateMatrix(Board &matrix, int t)
-{
-    int n = matrix.size();
-    for (int l = 0; l < t; l++)
-    {
-        for (int i = 0; i < n; i++)
-        {
-            for (int j = i + 1; j < n; j++)
-            {
-                int o = matrix[i][j];
-                matrix[i][j] = matrix[j][i];
-                matrix[j][i] = o;
-            }
-        }
-        for (int i = 0; i < n; ++i)
-        {
-            reverseVector(matrix[i]);
-        }
+void reverseRows(Board &matrix) {
+    for (auto &row : matrix) {
+        std::reverse(row.begin(), row.end());
+    }
+}
+
+void rotateMatrix(Board &matrix, int t) {
+    int rotations = t % 4;
+    for (int i = 0; i < rotations; ++i) {
+        transposeMatrix(matrix); 
+        reverseRows(matrix);
     }
 }
 
 /**
- * @brief Returns the RGB color associated with a given cell value in the 2048 game.
+ * @brief Returns the RGB color associated with a given tile value in the 2048 game.
  *
- * @param value The value of the cell.
- * @return A tuple containing the RGB color (red, green, blue) associated with the cell value.
+ * @param value The value of the tile.
+ * @return A tuple containing the RGB color (red, green, blue) associated with the tile value.
  */
-std::tuple<int, int, int> getCellColor(int value)
+std::tuple<int, int, int> getTileColor(int value)
 {
-    // Couleurs associées aux valeurs des cellules
+    // Couleurs associées aux valeurs des tileules
     std::map<int, std::tuple<int, int, int>> colorMap = {
         {2, {238, 228, 218}},   // Beige clair
         {4, {237, 224, 200}},   // Beige
@@ -100,10 +99,59 @@ std::tuple<int, int, int> getCellColor(int value)
         {2048, {237, 194, 46}}  // Doré brillant
     };
 
-    // Retourne la couleur correspondante ou un gris par défaut
     if (colorMap.find(value) != colorMap.end())
     {
         return colorMap[value];
     }
-    return {0, 0, 0}; // noir pour les cellules vides
+    return {0, 0, 0}; 
+}
+
+Vect getMatrixValues(Board &board){
+    Vect values = Vect(pow(board.size(), 2));
+    for (Board::size_type i=0; i<board.size(); i++)
+    {
+        for (Vect::size_type j=0; j<board[i].size(); j++)
+        {
+            values[i*board.size() + j] = board[i][j];
+        }
+    }
+    std::sort(values.begin(), values.end());
+    std::reverse(values.begin(), values.end());
+    return values;
+}
+
+int maxScoreGain(const Vect &values)
+{
+    int s = 0;
+    for (Vect::size_type i=0; i<values.size()-1; i++)
+    {
+        if (values[i] == values[i+1])
+        {
+            s += 2*values[i];
+            i++;
+        }
+    }
+    return s;
+}
+
+int getNumberTiles(Board &board){
+    int columnSize = static_cast<int>(board.size());
+    int rowSize = static_cast<int>(board[0].size());
+    return columnSize * rowSize;
+}
+
+int numberEmptyTiles(Board &board)
+{
+    int numberEmptyTiles;
+    for (auto &row : board)
+    {
+        for (auto &tile : row)
+        {
+            if (tile == 0)
+            {
+                numberEmptyTiles++;
+            }
+        }
+    }
+    return numberEmptyTiles;
 }

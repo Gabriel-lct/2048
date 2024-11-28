@@ -2,28 +2,16 @@
 #define GUI_H
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <vector>
 
 using Board = std::vector<std::vector<int>>;
 
-class GUI
-{
-public:
-    GUI();
-    ~GUI();
+void initSDL(SDL_Window* &window, SDL_Renderer* &renderer, TTF_Font* &font);
 
-    void init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen);
-    void handleEvents();
-    void update();
-    void render();
-    void clean();
-    bool running();
+void renderBoard(Board &board, SDL_Renderer* &renderer, TTF_Font* &font);
 
-private:
-    bool isRunning;
-    SDL_Window *window;
-    SDL_Renderer *renderer;
-};
+void handleEvents(bool &running);
 
 #endif
