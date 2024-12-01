@@ -50,10 +50,9 @@ std::pair<double, int> minimax(Board board, int oldScore, int score, const VectD
         int bestDir = -1;
         for (int dir = 0; dir < 4; dir++)
         {
-            int c = 0;
             Board dupliBoard = board;
             int newScore = score;
-            slide(dupliBoard, dir, newScore, c);
+            slide(dupliBoard, dir, newScore, false);
             if (dupliBoard == board)
             {
                 continue;
@@ -148,10 +147,7 @@ double evaluateBoard(Board &board, int &oldScore, int &score, const VectDouble &
     int numberTiles = getNumberTiles(board);
     Vect boardValues = getMatrixValues(board);
 
-    if (isGameOver(board))
-    {
-        return -std::numeric_limits<double>::max();
-    }
+   
 
     // ANCHOR - Criteria n°1 - Max tile in corner a.k.a PG au coin
     Vect biggestIndex = biggestTile(board);
@@ -160,15 +156,21 @@ double evaluateBoard(Board &board, int &oldScore, int &score, const VectDouble &
 
     bool inCorner = false;
 
-    if ((maxX == 0 && (maxY == 0 || maxY == board[maxX].size() - 1)) || (maxX == board.size() - 1 && (maxY == 0 || maxY == board[maxX].size() - 1)))
+     if (isGameOver(board) || not (maxX==0 && maxY==0))
+    {
+        return -std::numeric_limits<double>::max();
+    }
+
+    //if ((maxX == 0 && (maxY == 0 || maxY == board[maxX].size() - 1)) || (maxX == board.size() - 1 && (maxY == 0 || maxY == board[maxX].size() - 1)))
+    if (maxX==0 && maxY==0)
     {
         inCorner = true;
         evaluation += w_corner;
     }
 
     // ANCHOR - Criteria N°2 - Serpentinage
-    if (score < 100000)//stops serpentinage, pour l'instant.
-    {
+    //if (score < 10000)//stops serpentinage, pour l'instant.
+    //{
         for (Board::size_type i = 0; i < board.size(); ++i)
         {
             for (Vect::size_type j = 0; j < board[i].size(); ++j)
@@ -186,8 +188,8 @@ double evaluateBoard(Board &board, int &oldScore, int &score, const VectDouble &
                 }
             }
         }
-    }
-    else
+    //}
+    if (score >= 10000)
     {
         if (inCorner)
         {
@@ -214,7 +216,7 @@ double evaluateBoard(Board &board, int &oldScore, int &score, const VectDouble &
             int inRow = 0;
             check_serpentinage(boardCopy, 0, true, boardValuesCopy, inRow);
 
-            score += w_serpentinage * inRow / numberTiles;
+            score += w_serpentinage * pow(inRow, 2) / numberTiles;
         }
     }
 

@@ -18,7 +18,7 @@ void fuse(Board &p, int &c, int &s);
 
 void spawn(Board &p, int &c);
 
-void slide(Board &p, int dir, int &s, int &c);
+void slide(Board &p, int dir, int &s, bool sp);
 
 bool isGameOver(Board &board);
 

@@ -80,14 +80,14 @@ Board genBoard(int N, int M)
 
 int takeInput()
 {
-    char i;
+    std::string i;
     std::cout << "Entrer commande: ";
     std::cin >> i;
     std::cout << std::endl;
     int dir;
     try
     {
-        dir = MODE.at(i);
+        dir = MODE.at(i[0]);
     }
     catch (const std::exception &e)
     {
@@ -169,11 +169,17 @@ void fuse(Board &board, int &c, int &s)
     }
 }
 // 0: up, 1: left, 2: down, 3: right
-void slide(Board &board, int dir, int &s, int &c)
+void slide(Board &board, int dir, int &s, bool sp)
 {
+    if (dir == -1)
+    {
+        return;
+    }
+    int c = 0;
     rotateMatrix(board, dir);
     move(board, c);
     fuse(board, c, s);
     move(board, c);
     rotateMatrix(board, (4 - dir) % 4);
+    if (sp){spawn(board, c);}
 }

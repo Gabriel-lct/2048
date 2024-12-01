@@ -8,10 +8,10 @@
 
 using Board = std::vector<std::vector<int>>;
 
-void initSDL(SDL_Window* &window, SDL_Renderer* &renderer, TTF_Font* &font);
+void initSDL(SDL_Window* &window, SDL_Renderer* &renderer, TTF_Font* &font, int width, int height);
 
 void renderBoard(Board &board, SDL_Renderer* &renderer, TTF_Font* &font);
 
-void handleEvents(bool &running);
+int handleEvents(bool &running, Board board);
 
 #endif

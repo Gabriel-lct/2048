@@ -86,6 +86,7 @@ std::tuple<int, int, int> getTileColor(int value)
 {
     // Couleurs associées aux valeurs des tileules
     std::map<int, std::tuple<int, int, int>> colorMap = {
+        {0, {189, 172, 151}},
         {2, {238, 228, 218}},   // Beige clair
         {4, {237, 224, 200}},   // Beige
         {8, {242, 177, 121}},   // Orange clair
@@ -103,7 +104,7 @@ std::tuple<int, int, int> getTileColor(int value)
     {
         return colorMap[value];
     }
-    return {0, 0, 0}; 
+    return {61, 58, 50}; 
 }
 
 Vect getMatrixValues(Board &board){

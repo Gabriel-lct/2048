@@ -2,12 +2,12 @@
 TARGET = 2048
 
 # Les fichiers sources
-SRC = ./src/2048.cpp ./src/Display.cpp ./src/Utils.cpp ./src/Game.cpp ./src/AI.cpp ./src/GA.cpp
+SRC = ./src/2048.cpp ./src/Display.cpp ./src/Utils.cpp ./src/Game.cpp ./src/AI.cpp ./src/GA.cpp ./src/GUI.cpp
 
 # Le compilateur et les options
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall -I/usr/include/SDL2 -fopenmp # Include SDL2 headers
-LDFLAGS = -lSDL2  # Link SDL2 and SDL2_ttf libraries
+CXXFLAGS = -std=c++17 -Wall -I/usr/include/SDL2 -I/usr/include/SDL2_ttf -fopenmp # Include SDL2 headers
+LDFLAGS = -lSDL2 -lSDL2_ttf # Link SDL2 and SDL2_ttf libraries
 
 # Dossier de sortie
 OUT_DIR = .

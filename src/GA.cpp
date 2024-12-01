@@ -15,14 +15,12 @@ double runAi(const VectDouble &genome)
 
     while (true)
     {
-        int c = 0;
-        int dir = findBestMove(board, score, 4, genome);
+        int dir = findBestMove(board, score, 10, genome);
         if (dir == -1)
         {
             return score;
         }
-        slide(board, dir, score, c);
-        spawn(board, c);
+        slide(board, dir, score, true);
     }
 }
 
@@ -64,7 +62,7 @@ void runGeneticAlgorithm(BoardDouble &population, int &maxGamesPerGenome, int ma
 
         std::cout << "  Second step: Selection" << std::endl;
         // Etape 2 - Selection (20% of the current population)
-        BoardDouble selectedGenomes = rouletteWheelSelection(population, fitnessScores, static_cast<int>(population.size() * 0.2));
+        BoardDouble selectedGenomes = rouletteWheelSelection(population, fitnessScores, static_cast<int>(population.size() * 0.1));
 
         std::cout << std::endl;
         VectDouble bestGenome = population[getBestGenome(fitnessScores)];
@@ -169,7 +167,7 @@ VectDouble evaluatePopulation(const BoardDouble &population, int numTrials)
 
 BoardDouble rouletteWheelSelection(BoardDouble population, VectDouble fitnessScores, int numSelection)
 {
-    double probability = 0.25;
+    double probability = 0.0;
     // Select genomes
     BoardDouble selectedGenomes;
 
@@ -256,7 +254,7 @@ void mutateGenome(VectDouble &genome, double mutationRate, double mutationStreng
     {
         if (mutationChance(gen) < mutationRate)
         {
-            gene += noise(gen);
+            gene += gene*noise(gen);
         }
     }
 }
