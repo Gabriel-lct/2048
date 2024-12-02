@@ -147,6 +147,8 @@ double evaluateBoard(Board &board, int &oldScore, int &score, const VectDouble &
     int numberTiles = getNumberTiles(board);
     Vect boardValues = getMatrixValues(board);
 
+    Board::size_type size = board.size();
+
    
 
     // ANCHOR - Criteria n°1 - Max tile in corner a.k.a PG au coin
@@ -156,7 +158,7 @@ double evaluateBoard(Board &board, int &oldScore, int &score, const VectDouble &
 
     bool inCorner = false;
 
-     if (isGameOver(board) || not (maxX==0 && maxY==0))
+     if (isGameOver(board))
     {
         return -std::numeric_limits<double>::max();
     }
@@ -171,6 +173,7 @@ double evaluateBoard(Board &board, int &oldScore, int &score, const VectDouble &
     // ANCHOR - Criteria N°2 - Serpentinage
     //if (score < 10000)//stops serpentinage, pour l'instant.
     //{
+    double proximityScore = 0;
         for (Board::size_type i = 0; i < board.size(); ++i)
         {
             for (Vect::size_type j = 0; j < board[i].size(); ++j)
@@ -179,16 +182,20 @@ double evaluateBoard(Board &board, int &oldScore, int &score, const VectDouble &
                 {
                     if (i > 0 && board[i - 1][j] != 0)
                     {
-                        evaluation -= w_proximity * std::abs(std::log2(board[i][j]) - std::log2(board[i - 1][j])); // TODO - Normaliser ici
+                        proximityScore += std::abs(std::log2(board[i][j]) - std::log2(board[i - 1][j]));
+                        //evaluation -= w_proximity * std::abs(std::log2(board[i][j]) - std::log2(board[i - 1][j])); // TODO - Normaliser ici
                     }
                     if (j > 0 && board[i][j - 1] != 0)
                     {
-                        evaluation -= w_proximity * std::abs(std::log2(board[i][j]) - std::log2(board[i][j - 1]));
+                        proximityScore += std::abs(std::log2(board[i][j]) - std::log2(board[i][j - 1]));
+                        //evaluation -= w_proximity * std::abs(std::log2(board[i][j]) - std::log2(board[i][j - 1]));
                     }
                 }
             }
         }
     //}
+    proximityScore /= 4*(size-2)*(size-2) + 12*(size-2) + 8;
+    evaluation -= w_proximity * proximityScore;
     if (score >= 10000)
     {
         if (inCorner)
@@ -216,18 +223,19 @@ double evaluateBoard(Board &board, int &oldScore, int &score, const VectDouble &
             int inRow = 0;
             check_serpentinage(boardCopy, 0, true, boardValuesCopy, inRow);
 
-            score += w_serpentinage * pow(inRow, 2) / numberTiles;
+            evaluation += w_serpentinage * pow(inRow, 2) / numberTiles;
         }
     }
 
     // Criteria n°3 : number of empty tiles
-    score += numberEmptyTiles(board) / numberTiles * w_empty;
-
+    evaluation += 1.*numberEmptyTiles(board) / (1.*numberTiles) * w_empty;
     // Criteria n°4 : score
     int maxScore = maxScoreGain(boardValues);
     if (maxScore != 0)
     {
-        score += (score - oldScore) / maxScore * w_score;
+        evaluation += 1.*(score - oldScore) / maxScore * w_score;
+        //std::cout << 1.*(score - oldScore) / maxScore * w_score << std::endl;
     }
+
     return evaluation;
 }

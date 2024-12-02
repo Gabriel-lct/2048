@@ -143,7 +143,7 @@ int getNumberTiles(Board &board){
 
 int numberEmptyTiles(Board &board)
 {
-    int numberEmptyTiles;
+    int numberEmptyTiles = 0;
     for (auto &row : board)
     {
         for (auto &tile : row)
