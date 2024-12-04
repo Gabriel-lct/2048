@@ -124,7 +124,7 @@ int handleEvents(bool &running, Board board)
             {
                 return 3;
             }
-            if (event.key.keysym.scancode == SDL_SCANCODE_A)
+            if (event.key.keysym.scancode == SDL_SCANCODE_Q) // ia master
             {
                 return 4;
             }

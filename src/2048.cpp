@@ -56,6 +56,13 @@ void run_GUI()
             SDL_Delay(frameDelay - frameTime);
         }
     }
+
+    // Clean up SDL resources
+    TTF_CloseFont(font);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    TTF_Quit();
+    SDL_Quit();
 }
 
 void run_CLI()
