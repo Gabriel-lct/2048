@@ -11,7 +11,7 @@
 #include <thread>
 #include <chrono>
 
- void run_GUI()
+void run_GUI()
 {
     const int FPS = 60;
     const int frameDelay = 1000 / FPS;
@@ -22,21 +22,32 @@
     int S = 0;
 
     Board board = genBoard(N, M);
+    VectDouble genome = {10, 5, 0, 2, 10};
 
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
     TTF_Font *font = NULL;
-    initSDL(window, renderer, font, 900, 900);
+    initSDL(window, renderer, font, 600, 600);
     bool running = true;
+    bool iaRunning = false;
     Uint32 frameStart, frameTime;
-    while(running)
+    while (running)
     {
         frameStart = SDL_GetTicks();
 
         renderBoard(board, renderer, font);
         SDL_RenderPresent(renderer);
         int dir = handleEvents(running, board);
-        //std::cout << dir << std::endl;
+
+        if (dir == 4)
+        {
+            iaRunning = !iaRunning;
+        }
+        if (iaRunning)
+        {
+            dir = findBestMove(board, S, 6, genome);
+        }
+
         slide(board, dir, S, true);
 
         frameTime = SDL_GetTicks() - frameStart;
@@ -45,7 +56,7 @@
             SDL_Delay(frameDelay - frameTime);
         }
     }
-} 
+}
 
 void run_CLI()
 {
@@ -93,7 +104,7 @@ void run_AI()
             return;
         }
         slide(board, dir, S, true);
-        //std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        // std::this_thread::sleep_for(std::chrono::milliseconds(100));
         clearConsole();
     }
 }
@@ -101,7 +112,7 @@ void run_AI()
 void run_GA()
 {
     std::cout << "Running genetic algorithm..." << std::endl;
-    VectDouble genome = {1.05984, 0.159454, 0.115378, 0.636072, 2.69887};//{1.51422, 0.173924, 1.4986, 1.04476, 0.243911};
+    VectDouble genome = {1.05984, 0.159454, 0.115378, 0.636072, 2.69887}; //{1.51422, 0.173924, 1.4986, 1.04476, 0.243911};
     int populationSize = 50;
     int maxGamesPerGenome = 10;
     int maxGenerations = 20;
