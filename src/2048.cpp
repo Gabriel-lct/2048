@@ -27,6 +27,7 @@ void run_GUI()
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
     TTF_Font *font = NULL;
+
     initSDL(window, renderer, font, 600, 600);
     bool running = true;
     bool iaRunning = false;
@@ -35,7 +36,8 @@ void run_GUI()
     {
         frameStart = SDL_GetTicks();
 
-        renderBoard(board, renderer, font);
+        renderBoard(board, renderer, font, window);
+        renderScore(S, renderer, font);
         SDL_RenderPresent(renderer);
         int dir = handleEvents(running, board);
 
