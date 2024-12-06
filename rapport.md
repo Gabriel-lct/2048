@@ -12,39 +12,42 @@ kernelspec:
 
 # Rapport de projet 2048
 
-:::{admonition} Consignes
-
-Les consignes comme celui-ci vous donnent des indications sur le
-contenu attendu; ils sont à supprimer une fois votre rapport rédigé.
-
-Ce rapport pourra servir de support pour votre présentation orale.
-
-Soyez objectifs et factuels! Vous ne serez pas évalué sur ce que vous
-affirmez, mais sur la pertinence et la justesse de ce que vous
-affirmez.
-
-:::
-
-+++
-
 ## Auteurs
 
-- Nom, prénom, courriel, groupe
-- Nom, prénom, courriel, groupe
+- Bozzi Menéndez Luca, luca.bozzi-menendez@etu-upsaclay.fr
+- Lancelot Gabriel, gabriel.lancelot@universite-paris-saclay.fr
 
 +++
+
+## Installation du projet
+
+Pour installer les dépendances nécessaires au projet, suivez les instructions ci-dessous en fonction de votre système d'exploitation.
+
+### Prérequis
+Avant de commencer, assurez-vous d'avoir les éléments suivants installés :
+- [WSL (Windows Subsystem for Linux)](https://learn.microsoft.com/fr-fr/windows/wsl/install) pour les utilisateurs Windows.
+- Un compilateur C++ supportant C++17 (ou plus récent).
+- [SDL2](https://www.libsdl.org/) pour la gestion des graphismes (sinon voir étape 2).
+
+### Étape 1 : Cloner le dépôt
+Clonez le dépôt Git contenant le projet :
+```bash
+git clone <URL_DU_DEPOT>
+cd <nom-du-dossier>
+```
+
+### Étape 2 : Installer SDL2
+Vous pouvez installer SDL2 via [ce lien](https://wiki.libsdl.org/SDL2/Installation).
+
+### Étape 3 : Installer les dépendances
+```bash
+sudo apt update
+sudo apt install METTRE DEPENDANCES
+```
 
 ## Résumé du travail effectué
 
 :::{admonition} Consignes
-
-Pour chaque niveau du sujet, décrivez brièvement l'avancement de votre
-projet.
-
-Exemples de réponses : «non traitée», «réalisée, documentée, testée»,
-«réalisée, sauf 2.3», «réalisée mais non testée», «réalisée sauf ...
-pour lequel notre programme ne compile pas» ou «pour lequel les tests
-de la fonction D ne passent pas».
 
 Pour les questions «Aller plus loin» plus ouvertes, décrivez plus en
 détail ce que vous avez choisi de réaliser. Précisez les difficultés
@@ -57,11 +60,27 @@ confiance: présence de tests, bogues et limitations connus, etc.
 
 :::
 
-- Niveau 0: ...
-- Niveau 1: ...
-- ...
+- Niveau 0 : 
+  - Structure du jeu : réalisée, documentée, testée
+  - Compilation des fichiers : réalisée, documentée, testée
+  - Fonctionnalité du jeu : réalisée, documentée, testée
+  - Respect des règles : réalisée, documentée, testée
+  - Mise à jour du score : réalisée, documentée, testée
+  - Alignement des colonnes : réalisée, documentée, testée.
 
-+++
+- Niveau 1 : 
+  - Couleur console : réalisée, documentée, testée. Pas de difficultés particulières rencontrées.
+  - Flèches clavier : réalisée, documentée, testée. Pas de difficultés particulières rencontrées.
+  - Rafraîchissement écran : réalisée, documentée, testée. Pas de difficultés particulières rencontrées.
+  - Structure score : non réalisée
+- Niveau 2 : 
+  - Makefile : réalisée, documentée, testée. Un peu de recherche sur internet aura permis de créer le MakeFile.
+  - Gestionnaire de version : réalisée, documentée, testée. Aucune difficulté, le projet est disponible sur GitHub.
+- Niveau 3 : 
+  - IA : réalisée, documentée, testée. Voir section IA.
+  - Variante (taille grille) : réalisée, documentée, testée.  Pas de difficultés particulières rencontrées.
+  - SDL Integration : réalisée, documentée, testée. Voir section SDL.
+  - Application : ahah, non.
 
 ## Démonstration
 
@@ -85,10 +104,12 @@ vous avez réussi à le faire.
 
 :::
 
+Suivons ensemble les étapes d'une partie de 2048.
+
 Pour compiler le projet, vous pouvez exécuter la commande suivante :
 
-```{code-cell}
-! clang g++ 2048.cpp -o 2048
+```bash
+make
 ```
 
 Vous pourrez alors lancer le jeu depuis un terminal avec :
@@ -106,6 +127,12 @@ collaborer, etc. Si vous avez bénéficié d'aide (en dehors de celle de
 vos enseigants), précisez le.
 :::
 
+Pour ce projet, nous avons adopté une organisation assez simple mais efficace. Chacun travaillait de son côté, en se concentrant sur des aspects précis du projet. Nous avons utilisé GitHub pour centraliser et synchroniser notre travail.
+
+Luca s’est principalement chargé de la logique interne du jeu, assurant que les règles soient bien respectées et que le comportement général soit fluide. Il a également travaillé sur l’affichage SDL pour rendre le jeu agréable visuellement. De son côté, Gabriel s’est concentré sur l’affichage en mode terminal, pour avoir une version simplifiée mais fonctionnelle du jeu. En plus de cela, il a conçu une IA capable de jouer automatiquement ainsi qu'un algorithme génétique qui permet l'optimisation de la détermination des poids utilisés dans par la fonction de récompense de l'IA. 
+
+
+Nous avons consacré environ trente heures chacun à ce projet, réparties sur plusieurs semaines, souvent en soirée ou durant nos temps libres. Bien que nous ayons principalement travaillé de manière autonome, nous avons aussi échangé régulièrement pour discuter de nos idées, ajuster nos priorités et résoudre des problèmes ensemble.
 +++
 
 ## Prise de recul
@@ -115,4 +142,11 @@ Décrivez en quelques phrases les difficultés rencontrées, ce que vous
 avez appris à l'occasion du projet, le cas échéant comment vous vous y
 prendriez si vous aviez à le refaire.
 :::
+
+L’un des principaux obstacles a été l’utilisation de SDL. Rien que l’installation s’est avérée complexe et frustrante, car il faut installer de nombreux fichiers de la bibliotèque SDL2 qui s'ont difficilement trouvable. Une fois cette étape passée, le développement avec SDL demandait de tout programmer manuellement, ce qui est puissant mais aussi très chronophage. Cela nous a appris l’importance de bien choisir les outils en fonction du projet, et de bien anticiper la phase d’installation et de configuration. 
+
+Pour l’IA, la partie concernant l’algorithme Minimax n’a pas posé de grandes difficultés. En regardant quelques vidéos explicatives sur YouTube (environ trois ou quatre), le concept et son implémentation ont été assez clairs. Par contre, une grosse difficulté est survenue lorsqu’il a fallu déterminer les poids de la fonction de récompense pour guider l’IA. Malgré nos efforts, nous n’avons pas trouvé de solution satisfaisante à ce problème jusqu’à présent.
+
+Si nous devions refaire ce projet, nous serions plus méthodiques dans notre approche. Pour SDL, nous testerions d’autres bibliothèques, ce qui aurait pu nous épargner des heures de configuration et de compréhension de SDL.
+Pour l’IA, nous envisagerions d’approfondir les méthodes de réglage des poids, peut-être en utilisant des techniques de machine learning ou en consultant davantage de ressources. Cela nous permettrait de produire une IA plus performante et cohérente.
 
