@@ -16,4 +16,6 @@ void renderScore(int score, SDL_Renderer* &renderer, TTF_Font *&font);
 
 int handleEvents(bool &running, Board board);
 
+void terminateGUI(SDL_Window* &window, SDL_Renderer* &renderer, TTF_Font* &font);
+
 #endif

@@ -132,28 +132,39 @@ int handleEvents(bool &running, Board board)
             break;
 
         case SDL_KEYDOWN:
-            if (event.key.keysym.scancode == SDL_SCANCODE_DOWN || event.key.keysym.scancode == SDL_SCANCODE_S)
+            switch (event.key.keysym.scancode)
             {
+            case SDL_SCANCODE_DOWN: case SDL_SCANCODE_S:
                 return 2;
-            }
-            if (event.key.keysym.scancode == SDL_SCANCODE_UP || event.key.keysym.scancode == SDL_SCANCODE_W)
-            {
+                break;
+            case SDL_SCANCODE_UP: case SDL_SCANCODE_W:
                 return 0;
-            }
-            if (event.key.keysym.scancode == SDL_SCANCODE_LEFT || event.key.keysym.scancode == SDL_SCANCODE_A)
-            {
+                break;
+            case SDL_SCANCODE_LEFT: case SDL_SCANCODE_A:
                 return 1;
-            }
-            if (event.key.keysym.scancode == SDL_SCANCODE_RIGHT || event.key.keysym.scancode == SDL_SCANCODE_D)
-            {
+                break;
+            case SDL_SCANCODE_RIGHT: case SDL_SCANCODE_D:
                 return 3;
-            }
-            if (event.key.keysym.scancode == SDL_SCANCODE_Q) // ia master
-            {
+                break;
+            case SDL_SCANCODE_Q:
                 return 4;
+                break;
+            case SDL_SCANCODE_ESCAPE:
+                return 5;
+                break;
+            default:
+                break;
             }
-            break;
         }
     }
     return -1;
+}
+
+void terminateGUI(SDL_Window *&window, SDL_Renderer *&renderer, TTF_Font *&font)
+{
+    TTF_CloseFont(font);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    TTF_Quit();
+    SDL_Quit();
 }

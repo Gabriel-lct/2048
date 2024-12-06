@@ -84,6 +84,11 @@ int takeInput()
     std::cout << "Entrer commande: ";
     std::cin >> i;
     std::cout << std::endl;
+    if(i == "x")
+    {
+        std::cout << "Vous avez perdu. #looser. Tu es sombre merde" << std::endl;
+        return 5;
+    }
     int dir;
     try
     {

@@ -1,4 +1,4 @@
----
+a---
 jupytext:
   text_representation:
     extension: .md
@@ -102,33 +102,31 @@ Dans le terminal, s'affiche alors les propositions suivantes :
 | --- | --- | --- |
 | `1` | CLI | Lance le jeu en mode console. |
 | `2` | GUI | Lance le jeu en mode graphique. |
-| `3` | GA | Lance le jeu en mode console avec un algorithme génétique. |
+| `3` | GA | Lance l'algorithme génétique. |
+| `4` | OPT | Affiche les options disponibles. |
 
-### Mode console
+### CLI -  Mode console
 
-Pour lancer une partie en mode console, il suffit de taper `1` puis `Entrée`. Vous pourrez alors jouer en utilisant les touches `q`, `z`, `d`, `s`.
+Pour lancer une partie en mode console, il suffit de taper `1` puis `Entrée`. Pour jouer, voir les commandes ci-dessous.
 
+### GUI - Mode Graphique
+
+Pour lancer une partie en mode graphique, il suffit de taper `2` puis `Entrée`. Pour jouer, voir les commandes ci-dessous.
+
+### GA - Algorithme génétique
+
+Pour lancer l'algorithme génétique, il suffit de taper `3` puis `Entrée`.
+
+### Commandes
 | Touche | Action |
 | --- | --- |
-| `q` | Déplacer les tuiles vers la gauche. |
-| `z` | Déplacer les tuiles vers le haut. |
-| `d` | Déplacer les tuiles vers la droite. |
-| `s` | Déplacer les tuiles vers le bas. |
+| `q`, `flèche gauche` | Déplacer les tuiles vers la gauche. |
+| `d`, `flèche droite` | Déplacer les tuiles vers la droite. |
+| `z`, `flèche haut` | Déplacer les tuiles vers le haut. |
+| `s`, `flèche bas` | Déplacer les tuiles vers le bas. |
 | `a` | Lancer/arrêter l'IA. |
-
-### Mode Graphique
-
-Pour lancer une partie en mode graphique, il suffit de taper `2` puis `Entrée`. Vous pourrez alors jouer en utilisant les touches `flèches directionnelles`.
-
-| Touche | Action |
-| --- | --- |
-| `flèche gauche` | Déplacer les tuiles vers la gauche. |
-| `flèche haut` | Déplacer les tuiles vers le haut. |
-| `flèche droite` | Déplacer les tuiles vers la droite. |
-| `flèche bas` | Déplacer les tuiles vers le bas. |
-| `a` | Lancer/arrêter l'IA. |
-
-
+| `r` | Recommencer la partie. |
+| `Echap` | Quitter le jeu. |
 
 ## Organisation du travail
 

@@ -13,13 +13,13 @@
 
 VectDouble genome = {10, 5, 0, 2, 10};
 
-void run_GUI()
+int run_GUI()
 {
     const int FPS = 60;
     const int frameDelay = 1000 / FPS;
 
-    int N = 4;
-    int M = 4;
+    int N = 10;
+    int M = 10;
 
     int S = 0;
 
@@ -46,6 +46,10 @@ void run_GUI()
         if (dir == 4)
         {
             iaRunning = !iaRunning;
+        } else if (dir == 5)
+        {
+            terminateGUI(window, renderer, font);
+            return 1;
         }
         if (iaRunning)
         {
@@ -62,14 +66,11 @@ void run_GUI()
     }
 
     // Clean up SDL resources
-    TTF_CloseFont(font);
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    TTF_Quit();
-    SDL_Quit();
+    terminateGUI(window, renderer, font);
+    return 0;
 }
 
-void run_CLI()
+int run_CLI()
 {
     clearConsole();
     const int N = 4;
@@ -109,6 +110,10 @@ void run_CLI()
                 isIaRunning = !isIaRunning;
                 continue;
             }
+            if (direction == 5)
+            {
+                return 1;
+            }
         }
 
         if (direction == -1)
@@ -128,9 +133,10 @@ void run_CLI()
             break;
         }
     }
+    return 0;
 }
 
-void run_GA()
+int run_GA()
 {
     std::cout << "Running genetic algorithm..." << std::endl;
     VectDouble genome = {1.05984, 0.159454, 0.115378, 0.636072, 2.69887}; //{1.51422, 0.173924, 1.4986, 1.04476, 0.243911};
@@ -143,26 +149,40 @@ void run_GA()
     BoardDouble firstPopulation = initializePopulationFromGenome(genome, populationSize, mutationRate);
 
     runGeneticAlgorithm(firstPopulation, maxGamesPerGenome, maxGenerations, mutationRate, mutationStrength);
+    return 0;
+}
+
+int run_OPT(){
+    //"Please select a option to modif"
 }
 
 int main(int argc, char const *argv[])
 {
     int DISPLAY_MODE;
+    int running = 1;
+    while(running)
+    {
+        std::cout << "Please select a Game Mode: CLI (1), GUI (2), GA (3), OPT (4), EXIT (5): ";
+        std::cin >> DISPLAY_MODE;
 
-    std::cout << "Please select a Game Mode: CLI (1), GUI (2), GA (3): ";
-    std::cin >> DISPLAY_MODE;
-
-    if (DISPLAY_MODE == 1)
-    {
-        run_CLI();
-    }
-    else if (DISPLAY_MODE == 2)
-    {
-        run_GUI();
-    }
-    else if (DISPLAY_MODE == 3)
-    {
-        run_GA();
+        if (DISPLAY_MODE == 1)
+        {
+            running = run_CLI();
+        }
+        else if (DISPLAY_MODE == 2)
+        {
+            running = run_GUI();
+        }
+        else if (DISPLAY_MODE == 3)
+        {
+            running = run_GA();
+        } else if (DISPLAY_MODE == 4)
+        {
+            run_OPT();
+        } else if (DISPLAY_MODE == 5)
+        {
+            running = 0;
+        }
     }
 
     return 0;
