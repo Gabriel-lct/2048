@@ -138,7 +138,7 @@ int main(int argc, char const *argv[])
     // run_AI();
     int DISPLAY_MODE;
     // Provisionally using only CLI
-    std::cout << "Please select a Game Mode: GUI (1), CLI (2), AI (3), GA (4): ";
+    std::cout << "Please select a Game Mode: CLI (1), GUI (2), GA (4): ";
     std::cin >> DISPLAY_MODE;
     if (DISPLAY_MODE == 1)
     {
