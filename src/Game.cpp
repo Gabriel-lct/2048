@@ -6,7 +6,7 @@
 #include <iostream>
 #include <time.h>
 
-std::map<char, int> MODE = WASD;
+std::map<char, int> MODE = ZQSD;
 
 /**
  * @brief Spawns a new tile on the board.
@@ -99,19 +99,19 @@ int takeInput()
 
 bool isGameOver(Board &board)
 {
-    for (Board::size_type i=0; i<board.size(); i++)
+    for (Board::size_type i = 0; i < board.size(); i++)
     {
-        for (Vect::size_type j=0; j<board[i].size(); j++)
+        for (Vect::size_type j = 0; j < board[i].size(); j++)
         {
             if (board[i][j] == 0)
             {
                 return false;
             }
-            if (i > 0 && board[i][j] == board[i-1][j])
+            if (i > 0 && board[i][j] == board[i - 1][j])
             {
                 return false;
             }
-            if (j > 0 && board[i][j] == board[i][j-1])
+            if (j > 0 && board[i][j] == board[i][j - 1])
             {
                 return false;
             }
@@ -181,5 +181,8 @@ void slide(Board &board, int dir, int &s, bool sp)
     fuse(board, c, s);
     move(board, c);
     rotateMatrix(board, (4 - dir) % 4);
-    if (sp){spawn(board, c);}
+    if (sp)
+    {
+        spawn(board, c);
+    }
 }

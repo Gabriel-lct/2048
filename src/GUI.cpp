@@ -28,7 +28,7 @@ void initSDL(SDL_Window *&window, SDL_Renderer *&renderer, TTF_Font *&font, int 
     H = height;
     SDL_Init(SDL_INIT_EVERYTHING);
     TTF_Init();
-    window = SDL_CreateWindow("2048", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, W, H, SDL_WINDOW_SHOWN |  SDL_WINDOW_RESIZABLE);
+    window = SDL_CreateWindow("2048", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, W, H, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     font = TTF_OpenFont("./fonts/ClearSans/ClearSans-Bold.ttf", W);
     if (!font)
@@ -53,7 +53,7 @@ SDL_Texture *getTextTexture(const std::string &text, TTF_Font *&font, SDL_Color 
     return textTexture;
 }
 
-void renderBoard(Board &board, SDL_Renderer *&renderer, TTF_Font *&font, SDL_Window* &window)
+void renderBoard(Board &board, SDL_Renderer *&renderer, TTF_Font *&font, SDL_Window *&window)
 {
 
     SDL_GetWindowSize(window, &W, &H);
@@ -104,15 +104,15 @@ void renderBoard(Board &board, SDL_Renderer *&renderer, TTF_Font *&font, SDL_Win
     }
 }
 
-void renderScore(int score, SDL_Renderer* &renderer, TTF_Font *&font)
+void renderScore(int score, SDL_Renderer *&renderer, TTF_Font *&font)
 {
     SDL_Color black = {0, 0, 0, 255};
     SDL_Texture *textTexture = getTextTexture(std::to_string(score), font, black, renderer);
     int textWidth, textHeight;
     SDL_QueryTexture(textTexture, nullptr, nullptr, &textWidth, &textHeight);
     int maxDim = std::max(textHeight, textWidth);
-    textWidth = (textWidth * W/10) / (2 * maxDim);
-    textHeight = (textHeight * H/10) / (2 * maxDim);
+    textWidth = (textWidth * W / 10) / (2 * maxDim);
+    textHeight = (textHeight * H / 10) / (2 * maxDim);
     SDL_Rect destRect = {0, 0, textWidth, textHeight};
 
     SDL_RenderCopy(renderer, textTexture, nullptr, &destRect);
@@ -132,19 +132,19 @@ int handleEvents(bool &running, Board board)
             break;
 
         case SDL_KEYDOWN:
-            if (event.key.keysym.scancode == SDL_SCANCODE_DOWN)
+            if (event.key.keysym.scancode == SDL_SCANCODE_DOWN || event.key.keysym.scancode == SDL_SCANCODE_S)
             {
                 return 2;
             }
-            if (event.key.keysym.scancode == SDL_SCANCODE_UP)
+            if (event.key.keysym.scancode == SDL_SCANCODE_UP || event.key.keysym.scancode == SDL_SCANCODE_W)
             {
                 return 0;
             }
-            if (event.key.keysym.scancode == SDL_SCANCODE_LEFT)
+            if (event.key.keysym.scancode == SDL_SCANCODE_LEFT || event.key.keysym.scancode == SDL_SCANCODE_A)
             {
                 return 1;
             }
-            if (event.key.keysym.scancode == SDL_SCANCODE_RIGHT)
+            if (event.key.keysym.scancode == SDL_SCANCODE_RIGHT || event.key.keysym.scancode == SDL_SCANCODE_D)
             {
                 return 3;
             }

@@ -24,10 +24,10 @@ bool isGameOver(Board &board);
 
 // u l d r
 const std::map<char, int>
-    WASD = {{'w', 0}, {'a', 1}, {'s', 2}, {'d', 3}};
+    WASD = {{'w', 0}, {'a', 1}, {'s', 2}, {'d', 3}, {'q', 4}};
 
-const std::map<char, int> ZQSD = {{'z', 0}, {'q', 1}, {'s', 2}, {'d', 3}};
-const std::map<char, int> FR = {{'h', 0}, {'d', 1}, {'b', 2}, {'g', 3}};
-const std::map<char, int> EN = {{'u', 0}, {'l', 1}, {'d', 2}, {'r', 3}};
+const std::map<char, int> ZQSD = {{'z', 0}, {'q', 1}, {'s', 2}, {'d', 3}, {'a', 4}};
+const std::map<char, int> FR = {{'h', 0}, {'d', 1}, {'b', 2}, {'g', 3}, {'a', 4}};
+const std::map<char, int> EN = {{'u', 0}, {'l', 1}, {'d', 2}, {'r', 3}, {'a', 4}};
 
 #endif

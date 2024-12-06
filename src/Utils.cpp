@@ -29,13 +29,14 @@ Vect biggestTile(Board &board)
 {
     int biggest = board[0][0];
     int x = 0;
-    int y =0;
-    for (Board::size_type i=0; i<board.size(); i++)
+    int y = 0;
+    for (Board::size_type i = 0; i < board.size(); i++)
     {
-        for (Vect::size_type j=0; j<board[i].size(); j++)
+        for (Vect::size_type j = 0; j < board[i].size(); j++)
         {
             int tile = board[i][j];
-            if (tile >= biggest){
+            if (tile >= biggest)
+            {
                 biggest = tile;
                 x = i;
                 y = j;
@@ -53,25 +54,32 @@ void clearConsole()
     }
 }
 
-void transposeMatrix(Board &matrix) {
+void transposeMatrix(Board &matrix)
+{
     int n = matrix.size();
-    for (int i = 0; i < n; ++i) {
-        for (int j = i + 1; j < n; ++j) {
+    for (int i = 0; i < n; ++i)
+    {
+        for (int j = i + 1; j < n; ++j)
+        {
             std::swap(matrix[i][j], matrix[j][i]);
         }
     }
 }
 
-void reverseRows(Board &matrix) {
-    for (auto &row : matrix) {
+void reverseRows(Board &matrix)
+{
+    for (auto &row : matrix)
+    {
         std::reverse(row.begin(), row.end());
     }
 }
 
-void rotateMatrix(Board &matrix, int t) {
+void rotateMatrix(Board &matrix, int t)
+{
     int rotations = t % 4;
-    for (int i = 0; i < rotations; ++i) {
-        transposeMatrix(matrix); 
+    for (int i = 0; i < rotations; ++i)
+    {
+        transposeMatrix(matrix);
         reverseRows(matrix);
     }
 }
@@ -104,16 +112,17 @@ std::tuple<int, int, int> getTileColor(int value)
     {
         return colorMap[value];
     }
-    return {61, 58, 50}; 
+    return {61, 58, 50};
 }
 
-Vect getMatrixValues(Board &board){
+Vect getMatrixValues(Board &board)
+{
     Vect values = Vect(pow(board.size(), 2));
-    for (Board::size_type i=0; i<board.size(); i++)
+    for (Board::size_type i = 0; i < board.size(); i++)
     {
-        for (Vect::size_type j=0; j<board[i].size(); j++)
+        for (Vect::size_type j = 0; j < board[i].size(); j++)
         {
-            values[i*board.size() + j] = board[i][j];
+            values[i * board.size() + j] = board[i][j];
         }
     }
     std::sort(values.begin(), values.end());
@@ -124,18 +133,19 @@ Vect getMatrixValues(Board &board){
 int maxScoreGain(const Vect &values)
 {
     int s = 0;
-    for (Vect::size_type i=0; i<values.size()-1; i++)
+    for (Vect::size_type i = 0; i < values.size() - 1; i++)
     {
-        if (values[i] == values[i+1])
+        if (values[i] == values[i + 1])
         {
-            s += 2*values[i];
+            s += 2 * values[i];
             i++;
         }
     }
     return s;
 }
 
-int getNumberTiles(Board &board){
+int getNumberTiles(Board &board)
+{
     int columnSize = static_cast<int>(board.size());
     int rowSize = static_cast<int>(board[0].size());
     return columnSize * rowSize;
@@ -160,9 +170,37 @@ int numberEmptyTiles(Board &board)
 double vectorAverage(VectDouble &vect)
 {
     double a = 0;
-    for (auto c: vect)
+    for (auto c : vect)
     {
         a += c;
     }
-    return a/vect.size();
+    return a / vect.size();
+}
+
+// Function to check if a key has been pressed
+int kbhit(void)
+{
+    struct termios oldt, newt;
+    int ch;
+    int oldf;
+
+    tcgetattr(STDIN_FILENO, &oldt);
+    newt = oldt;
+    newt.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+    oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
+    fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
+
+    ch = getchar();
+
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+    fcntl(STDIN_FILENO, F_SETFL, oldf);
+
+    if (ch != EOF)
+    {
+        ungetc(ch, stdin);
+        return 1;
+    }
+
+    return 0;
 }

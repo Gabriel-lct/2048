@@ -11,6 +11,8 @@
 #include <thread>
 #include <chrono>
 
+VectDouble genome = {10, 5, 0, 2, 10};
+
 void run_GUI()
 {
     const int FPS = 60;
@@ -70,51 +72,61 @@ void run_GUI()
 void run_CLI()
 {
     clearConsole();
-    int N = 8;
-    int M = 8;
-    int S = 0;
-
+    const int N = 4;
+    const int M = 4;
+    int score = 0;
+    bool isIaRunning = false;
     Board board = genBoard(N, M);
 
     while (true)
     {
-        std::cout << "SCORE: " << S << std::endl;
+        clearConsole();
+        std::cout << "SCORE: " << score << std::endl;
         displayBoard(board);
-        int dir = takeInput();
-        if (dir == -1)
+
+        int direction;
+        if (isIaRunning)
         {
-            std::cout << "Commande invalide" << std::endl;
+            // Vérifiez si la touche 'a' est pressée pour arrêter l'IA
+            if (kbhit() && getchar() == 'a')
+            {
+                isIaRunning = !isIaRunning;
+                continue;
+            }
+
+            direction = findBestMove(board, score, 6, genome);
+            if (direction == -1)
+            {
+                std::cout << "Game over!" << std::endl;
+                break;
+            }
         }
         else
         {
-            slide(board, dir, S, true);
+            direction = takeInput();
+            if (direction == 4)
+            {
+                isIaRunning = !isIaRunning;
+                continue;
+            }
         }
-    }
-}
 
-void run_AI()
-{
-    // Max tile in corner - Power of 2 prowimity - number of empty tiles - score
-    VectDouble genome = {10, 5, 0, 2, 10};
-    clearConsole();
-    int N = 4;
-    int M = 4;
-    int S = 0;
-    Board board = genBoard(N, M);
+        if (direction == -1)
+        {
+            clearConsole();
+            std::cout << "Invalid command" << std::endl;
+            std::this_thread::sleep_for(std::chrono::milliseconds(300));
+        }
+        else
+        {
+            slide(board, direction, score, true);
+        }
 
-    while (true)
-    {
-        std::cout << "SCORE: " << S << std::endl;
-        displayBoard(board);
-        int dir = findBestMove(board, S, 10, genome);
-        if (dir == -1)
+        if (isGameOver(board))
         {
             std::cout << "Game over!" << std::endl;
-            return;
+            break;
         }
-        slide(board, dir, S, true);
-        // std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        clearConsole();
     }
 }
 
@@ -135,24 +147,20 @@ void run_GA()
 
 int main(int argc, char const *argv[])
 {
-    // run_AI();
     int DISPLAY_MODE;
-    // Provisionally using only CLI
-    std::cout << "Please select a Game Mode: CLI (1), GUI (2), GA (4): ";
+
+    std::cout << "Please select a Game Mode: CLI (1), GUI (2), GA (3): ";
     std::cin >> DISPLAY_MODE;
+
     if (DISPLAY_MODE == 1)
-    {
-        run_GUI();
-    }
-    else if (DISPLAY_MODE == 2)
     {
         run_CLI();
     }
-    else if (DISPLAY_MODE == 3)
+    else if (DISPLAY_MODE == 2)
     {
-        run_AI();
+        run_GUI();
     }
-    else if (DISPLAY_MODE == 4)
+    else if (DISPLAY_MODE == 3)
     {
         run_GA();
     }
