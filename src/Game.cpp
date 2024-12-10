@@ -94,7 +94,7 @@ void resetGame(GameState &gameState)
 
 int takeInput()
 {
-    int ch = getchar();
+    int ch = getch();
     return ch;
 }
 
@@ -107,19 +107,19 @@ int transformInputToCommand(std::string &keySetting, int input)
     }
 
     int dir = -1;
-    if (input == KEY_UP || input == MODE['U'])
+    if (input == KEY_UP)
     {
         dir = 0;
     }
-    else if (input == KEY_LEFT || input == MODE['L'])
+    else if (input == KEY_LEFT)
     {
         dir = 1;
     }
-    else if (input == KEY_DOWN || input == MODE['D'])
+    else if (input == KEY_DOWN)
     {
         dir = 2;
     }
-    else if (input == KEY_RIGHT || input == MODE['R'])
+    else if (input == KEY_RIGHT)
     {
         dir = 3;
     }
@@ -131,7 +131,7 @@ int transformInputToCommand(std::string &keySetting, int input)
     {
         dir = 5;
     }
-    else if (input == 27)
+    else if (input == 27) // Echap
     {
         dir = 6;
     }

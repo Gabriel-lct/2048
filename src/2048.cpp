@@ -137,7 +137,6 @@ int run_CLI(GameState &gameState)
 
         if (command == -1)
         {
-            clear();
             printw("Invalid command\n");
             refresh();
             napms(300);
@@ -324,7 +323,7 @@ int main(int argc, char const *argv[])
             clear();
             printw("Game has been reseted.\n");
             refresh();
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            napms(1000);
         }
         else if (DISPLAY_MODE == 54)
         {
@@ -336,7 +335,7 @@ int main(int argc, char const *argv[])
             clear();
             printw("Invalid option\n");
             refresh();
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            napms(1000);
         }
     }
     endwin();

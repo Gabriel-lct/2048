@@ -35,7 +35,7 @@ void initializeColors()
 
     // Define the custom colors (scale RGB values from 0-255 to 0-1000)
     std::map<int, std::tuple<int, int, int>> colorMap = {
-        {0, {189, 172, 151}},
+        {0, {192, 192, 192}},
         {2, {238, 228, 218}},
         {4, {237, 224, 200}},
         {8, {242, 177, 121}},
