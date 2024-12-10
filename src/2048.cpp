@@ -100,7 +100,7 @@ int run_CLI(GameState &gameState)
                 refresh();
                 resetGame(gameState);
                 napms(2500);
-                break;
+                return 1;
             }
         }
         else
@@ -265,7 +265,7 @@ int run_OPT(GameState &gameState)
         if (d < 1 || d > 16)
         {
             clear();
-            printw("Board size must be between 1 and 15.\n");
+            printw("AI depth must be between 1 and 15.\n");
             refresh();
             napms(1000);
 
@@ -349,7 +349,7 @@ int main(int argc, char const *argv[])
         {
             resetGame(gameState);
             clear();
-            printw("Game has been reseted.\n");
+            printw("Game has been reset.\n");
             refresh();
             napms(1000);
         }
