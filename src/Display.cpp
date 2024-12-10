@@ -1,8 +1,10 @@
 #include "./include/Display.h"
 #include "./include/Utils.h"
 #include <iostream>
+#include <ncurses.h> // Ensure ncurses is included
+#include <tuple>
+#include <map>
 
-// Previous code.
 /**
  * @brief Creates a line of asterisks with specified number of tiles and tile spacing.
  *
@@ -14,7 +16,7 @@
 
 std::string createLine(int numberOfTiles, int tileSpace)
 {
-
+    // Using ncurses to create a line
     std::string line = "*";
     for (int i = 0; i < numberOfTiles; i++)
     {
@@ -23,6 +25,48 @@ std::string createLine(int numberOfTiles, int tileSpace)
     return line;
 }
 
+void initializeColors()
+{
+    start_color();
+    if (!can_change_color() || COLORS < 16)
+    {
+        throw std::runtime_error("Your terminal does not support changing colors.");
+    }
+
+    // Define the custom colors (scale RGB values from 0-255 to 0-1000)
+    std::map<int, std::tuple<int, int, int>> colorMap = {
+        {0, {189, 172, 151}},
+        {2, {238, 228, 218}},
+        {4, {237, 224, 200}},
+        {8, {242, 177, 121}},
+        {16, {245, 149, 99}},
+        {32, {246, 124, 95}},
+        {64, {246, 94, 59}},
+        {128, {237, 207, 114}},
+        {256, {237, 204, 97}},
+        {512, {237, 200, 80}},
+        {1024, {237, 197, 63}},
+        {2048, {237, 194, 46}}};
+
+    int pairIndex = 1;
+    for (const auto &[value, rgb] : colorMap)
+    {
+        int r = std::get<0>(rgb) * 1000 / 255;
+        int g = std::get<1>(rgb) * 1000 / 255;
+        int b = std::get<2>(rgb) * 1000 / 255;
+
+        init_color(pairIndex, r, g, b);
+        if (value == 0)
+        {
+            init_pair(pairIndex, COLOR_WHITE, pairIndex);
+        }
+        else
+        {
+            init_pair(pairIndex, COLOR_BLACK, pairIndex);
+        }
+        ++pairIndex;
+    }
+}
 /**
  * @brief Displays the 2048 game board in a formatted manner.
  *
@@ -35,28 +79,37 @@ void displayBoard(Board &board)
     Vect biggestTileIndex = biggestTile(board);
     int tileSpace = std::max(countDigits(board[biggestTileIndex[0]][biggestTileIndex[1]]), 5);
 
-    std::cout << createLine(numberOfTiles, tileSpace) << std::endl;
+    printw("%s\n", createLine(numberOfTiles, tileSpace).c_str());
     for (const auto &line : board)
     {
-        std::cout << "*";
+        printw("*");
         for (const auto &tile : line)
         {
             int numberOfDigits = countDigits(tile);
             int spaces = tileSpace - numberOfDigits;
+            int power = 0;
+            while ((1 << power) < std::min(tile, 4096))
+            {
+                ++power;
+            }
+            int color_pair = power + 1;
+            attron(COLOR_PAIR(color_pair));
+            printw("%s", std::string(spaces / 2, ' ').c_str());
             if (tile != 0)
             {
-                auto [r, g, b] = getTileColor(tile);
-                std::cout << "\033[48;2;" << r << ";" << g << ";" << b << "m"
-                          << "\033[30m"
-                          << std::string(spaces / 2, ' ') << tile << std::string((spaces + 1) / 2, ' ')
-                          << "\033[0m" << "*";
+                printw("%d", tile);
             }
             else
             {
-                std::cout << std::string(spaces / 2, ' ') << tile << std::string((spaces + 1) / 2, ' ') << "*";
+                printw(" ");
             }
+            printw("%s", std::string(spaces - spaces / 2, ' ').c_str());
+            attroff(COLOR_PAIR(color_pair));
+            printw("*");
         }
-        std::cout << std::endl;
-        std::cout << createLine(numberOfTiles, tileSpace) << std::endl;
+        printw("\n");
+        printw("%s\n", createLine(numberOfTiles, tileSpace).c_str());
     }
+
+    refresh(); // Refresh the screen to show changes
 }

@@ -25,7 +25,9 @@ void initializeBoard(GameState &gameState);
 
 void resetGame(GameState &gameState);
 
-int takeInput(std::string &keySetting);
+int takeInput();
+
+int transformInputToCommand(std::string &keySetting, int input);
 
 void move(Board &p, int &c);
 void fuse(Board &p, int &c, int &s);

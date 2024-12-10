@@ -92,17 +92,13 @@ void resetGame(GameState &gameState)
     gameState.score = 0;
 }
 
-/**
- * @brief Takes input from the player.
- *
- * This function takes a command from the player and assings an integer value,
- * this
- *
- * @param board The 2D vector containing integer elements.
- * @return int The largest element in the board.
- */
+int takeInput()
+{
+    int ch = getchar();
+    return ch;
+}
 
-int takeInput(std::string &keySetting)
+int transformInputToCommand(std::string &keySetting, int input)
 {
     std::map<char, int> MODE = WASD;
     if (keySetting == "ZQSD")
@@ -110,53 +106,36 @@ int takeInput(std::string &keySetting)
         MODE = ZQSD;
     }
 
-    initscr();
-    cbreak();
-    noecho();
-    keypad(stdscr, TRUE);
-
-    int ch;
-    ch = getch();
-
-    endwin();
-
-    int dir;
-    try
+    int dir = -1;
+    if (input == KEY_UP || input == MODE['U'])
     {
-        if (ch == KEY_UP)
+        dir = 0; // Move up
+    }
+    else if (input == KEY_LEFT || input == MODE['L'])
+    {
+        dir = 1; // Move left
+    }
+    else if (input == KEY_DOWN || input == MODE['D'])
+    {
+        dir = 2; // Move down
+    }
+    else if (input == KEY_RIGHT || input == MODE['R'])
+    {
+        dir = 3; // Move right
+    }
+    else if (input == 'r')
+    {
+        dir = 4; // Reset command or any other action
+    }
+    else
+    {
+        // Check if input matches any key in MODE
+        auto it = MODE.find(input);
+        if (it != MODE.end())
         {
-            dir = 0;
-        }
-        else if (ch == KEY_LEFT)
-        {
-            dir = 1;
-        }
-        else if (ch == KEY_DOWN)
-        {
-            dir = 2;
-        }
-        else if (ch == KEY_RIGHT)
-        {
-            dir = 3;
-        }
-        else if (ch == 'r') // restart game
-        {
-            dir = 5;
-        }
-        else if (ch == 27)
-        {
-            dir = 6;
-        }
-        else
-        {
-            dir = MODE.at(ch);
+            dir = it->second;
         }
     }
-    catch (const std::exception &e)
-    {
-        return -1;
-    }
-
     return dir;
 }
 

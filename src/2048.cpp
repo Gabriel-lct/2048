@@ -10,6 +10,7 @@
 #include <SDL2/SDL.h>
 #include <thread>
 #include <chrono>
+#include <ncurses.h>
 
 VectDouble genome = {10, 5, 0, 2, 10};
 
@@ -72,20 +73,20 @@ int run_GUI(GameState &gameState)
 
 int run_CLI(GameState &gameState)
 {
-    clearConsole();
-
+    clear();
     bool isIaRunning = false;
 
     while (true)
     {
-        clearConsole();
-        std::cout << "SCORE: " << gameState.score << std::endl;
+        clear();
+        printw("SCORE: %d\n", gameState.score);
         displayBoard(gameState.currentBoard);
+        refresh();
 
         int direction;
         if (isIaRunning)
         {
-            // Vérifiez si la touche 'a' est pressée pour arrêter l'IA
+            // Check if 'a' is pressed to stop the AI
             if (kbhit() && getchar() == 'a')
             {
                 isIaRunning = !isIaRunning;
@@ -95,13 +96,15 @@ int run_CLI(GameState &gameState)
             direction = findBestMove(gameState.currentBoard, gameState.score, 6, genome);
             if (direction == -1)
             {
-                std::cout << "Game over!" << std::endl;
+                printw("\nGame over!\n");
+                refresh();
                 break;
             }
         }
         else
         {
-            direction = takeInput(gameState.keySetting);
+            int input = takeInput();
+            direction = transformInputToCommand(gameState.keySetting, input);
             if (direction == 4)
             {
                 isIaRunning = !isIaRunning;
@@ -109,16 +112,18 @@ int run_CLI(GameState &gameState)
             }
             else if (direction == 5)
             {
-                std::cout << std::endl;
-                std::cout << "Are you sure you want to reset your game? [y/n]  ";
-                char c;
-                std::cin >> c;
+                printw("\nAre you sure you want to reset your game? [y/n]  ");
+                refresh();
+                echo();
+                char c = getch();
+                noecho();
                 if (c == 'y')
                 {
                     resetGame(gameState);
-                    clearConsole();
-                    std::cout << "Game has been reseted." << std::endl;
-                    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                    clear();
+                    printw("Game has been reset.\n");
+                    refresh();
+                    napms(1000);
                 }
                 continue;
             }
@@ -130,21 +135,22 @@ int run_CLI(GameState &gameState)
 
         if (direction == -1)
         {
-            clearConsole();
-            std::cout << "Invalid command" << std::endl;
-            std::this_thread::sleep_for(std::chrono::milliseconds(300));
+            clear();
+            printw("Invalid command\n");
+            refresh();
+            napms(300);
         }
         else
         {
             slide(gameState.currentBoard, direction, gameState.score, true);
         }
 
-        if (isGameOver(gameState.currentBoard)) // FIXME - When the game is over, the game is not really over (for most of the cases).
+        if (isGameOver(gameState.currentBoard))
         {
-            std::cout << std::endl;
-            std::cout << "Game over!" << std::endl;
+            printw("\nGame over!\n");
             resetGame(gameState);
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            refresh();
+            napms(1000);
             return 1;
         }
     }
@@ -169,86 +175,91 @@ int run_GA()
 
 int run_OPT(GameState &gameState)
 {
-    clearConsole();
-
-    std::cout << "Please select an option to modify: " << std::endl;
-    std::cout << "  1. Board size" << std::endl;
-    std::cout << "  2. Keyboard setting" << std::endl;
-    std::cout << "  3. Return" << std::endl
-              << std::endl;
+    clear();
+    printw("Please select an option to modify:\n");
+    printw("  1. Board size\n");
+    printw("  2. Keyboard setting\n");
+    printw("  3. Return\n\n");
+    refresh();
 
     int option;
-    std::cout << "Your option: ";
-    std::cin >> option;
+    option = takeInput();
 
-    if (option == 1)
+    if (option == 49)
     {
-        clearConsole();
-        std::cout << "Please enter the new board size : ";
+        clear();
+        echo();
+        printw("Please enter the new board size: ");
+        refresh();
         int N;
-        std::cin >> N;
+        scanw("%d", &N);
+        noecho();
         if (N < 1 || N > 21)
         {
-            clearConsole();
-            std::cout << "Board size must be between 2 and 20." << std::endl;
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            clear();
+            printw("Board size must be between 2 and 20.\n");
+            refresh();
+            napms(1000);
 
             return run_OPT(gameState);
         }
         gameState.boardSize = N;
-        std::cout << "Board size updated to " << N << "x" << N << std::endl;
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        printw("Board size updated to %dx%d\n", N, N);
+        refresh();
+        napms(1000);
 
         return run_OPT(gameState);
     }
-    else if (option == 2)
+    else if (option == 50)
     {
-        clearConsole();
-        std::cout << "Please select a keyboard setting:" << std::endl;
-        std::cout << "  1. ZQSD" << std::endl;
-        std::cout << "  2. WASD" << std::endl;
-        std::cout << "  3. Return" << std::endl
-                  << std::endl;
-
-        std::cout << "Your option: ";
+        clear();
+        printw("Please select a keyboard setting:\n");
+        printw("  1. ZQSD\n");
+        printw("  2. WASD\n");
+        printw("  3. Return\n\n");
+        refresh();
         int keySetting;
-        std::cin >> keySetting;
+        keySetting = takeInput();
 
-        if (keySetting == 1)
+        if (keySetting == 49)
         {
             gameState.keySetting = "ZQSD";
-            clearConsole();
-            std::cout << "Keyboard setting updated to ZQSD" << std::endl;
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            clear();
+            printw("Keyboard setting updated to ZQSD\n");
+            refresh();
+            napms(1000);
         }
-        else if (keySetting == 2)
+        else if (keySetting == 50)
         {
             gameState.keySetting = "WASD";
-            clearConsole();
-            std::cout << "Keyboard setting updated to WASD" << std::endl;
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            clear();
+            printw("Keyboard setting updated to WASD\n");
+            refresh();
+            napms(1000);
         }
-        else if (keySetting == 3)
+        else if (keySetting == 51)
         {
             return run_OPT(gameState);
         }
         else
         {
-            clearConsole();
-            std::cout << "Invalid option" << std::endl;
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            clear();
+            printw("Invalid option\n");
+            refresh();
+            napms(1000);
         }
         return run_OPT(gameState);
     }
-    else if (option == 3)
+    else if (option == 51)
     {
         return 1;
     }
     else
     {
-        clearConsole();
-        std::cout << "Invalid option" << std::endl;
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        clear();
+        printw("Invalid option\n");
+        refresh();
+        napms(1000);
         return run_OPT(gameState);
     }
 }
@@ -258,65 +269,72 @@ int main(int argc, char const *argv[])
     GameState gameState = {0, 4, "ZQSD"};
     int DISPLAY_MODE;
     int running = 1;
+
+    initscr();
+    initializeColors();
+    use_default_colors();
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE);
+
     while (running)
     {
         clearConsole();
+        clear();
         initializeBoard(gameState);
 
-        std::cout << "Welcome to the 2048 Game." << std::endl
-                  << std::endl;
-        std::cout << "Current board size: " << gameState.boardSize << "x" << gameState.boardSize << std::endl;
-        std::cout << "Current key setting: " << gameState.keySetting << std::endl;
-        std::cout << "Current score: " << gameState.score << std::endl
-                  << std::endl;
-        std::cout << "Please select an option:" << std::endl;
-        std::cout << "  1. CLI (Client L... Interface)" << std::endl;
-        std::cout << "  2. GUI (Game User Interface)" << std::endl;
-        std::cout << "  3. GA (Genetic Algorithm)" << std::endl;
-        std::cout << "  4. OPTIONS" << std::endl;
-        std::cout << "  5. RESET" << std::endl;
-        std::cout << "  6. QUIT" << std::endl
-                  << std::endl;
+        printw("Welcome to the 2048 Game.\n\n");
+        printw("Current board size: %dx%d\n", gameState.boardSize, gameState.boardSize);
+        printw("Current key setting: %s\n", gameState.keySetting.c_str());
+        printw("Current score: %d\n\n", gameState.score);
+        printw("Please select an option:\n");
+        printw("  1. CLI (Client Line Interface)\n");
+        printw("  2. GUI (Game User Interface)\n");
+        printw("  3. GA (Genetic Algorithm)\n");
+        printw("  4. OPTIONS\n");
+        printw("  5. RESET\n");
+        printw("  6. QUIT\n\n");
+        refresh();
 
-        std::cout << "Your choice: ";
-        std::cin >> DISPLAY_MODE;
+        DISPLAY_MODE = takeInput();
 
-        if (DISPLAY_MODE == 1)
+        if (DISPLAY_MODE == 49)
         {
             running = run_CLI(gameState);
         }
-        else if (DISPLAY_MODE == 2)
+        else if (DISPLAY_MODE == 50)
         {
             running = run_GUI(gameState);
         }
-        else if (DISPLAY_MODE == 3)
+        else if (DISPLAY_MODE == 51)
         {
             running = run_GA();
         }
-
-        else if (DISPLAY_MODE == 4)
+        else if (DISPLAY_MODE == 52)
         {
             running = run_OPT(gameState);
         }
-        else if (DISPLAY_MODE == 5)
+        else if (DISPLAY_MODE == 53)
         {
             resetGame(gameState);
-            clearConsole();
-            std::cout << "Game has been reseted." << std::endl;
+            clear();
+            printw("Game has been reseted.\n");
+            refresh();
             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         }
-        else if (DISPLAY_MODE == 6)
+        else if (DISPLAY_MODE == 54)
         {
-            clearConsole();
+            clear();
             running = 0;
         }
         else
         {
-            clearConsole();
-            std::cout << "Invalid option" << std::endl;
+            clear();
+            printw("Invalid option\n");
+            refresh();
             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         }
     }
-
+    endwin();
     return 0;
 }

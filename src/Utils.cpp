@@ -46,6 +46,37 @@ Vect biggestTile(Board &board)
     return {x, y};
 }
 
+/**
+ * @brief Returns the RGB color associated with a given tile value in the 2048 game.
+ *
+ * @param value The value of the tile.
+ * @return A tuple containing the RGB color (red, green, blue) associated with the tile value.
+ */
+std::tuple<int, int, int> getTileColor(int value)
+{
+    // Couleurs associées aux valeurs des tileules
+    std::map<int, std::tuple<int, int, int>> colorMap = {
+        {0, {189, 172, 151}},
+        {2, {238, 228, 218}},   // Beige clair
+        {4, {237, 224, 200}},   // Beige
+        {8, {242, 177, 121}},   // Orange clair
+        {16, {245, 149, 99}},   // Orange foncé
+        {32, {246, 124, 95}},   // Rouge clair
+        {64, {246, 94, 59}},    // Rouge
+        {128, {237, 207, 114}}, // Jaune
+        {256, {237, 204, 97}},  // Jaune doré
+        {512, {237, 200, 80}},  // Jaune foncé
+        {1024, {237, 197, 63}}, // Or
+        {2048, {237, 194, 46}}  // Doré brillant
+    };
+
+    if (colorMap.find(value) != colorMap.end())
+    {
+        return colorMap[value];
+    }
+    return {61, 58, 50};
+}
+
 void clearConsole()
 {
     if (system("clear"))
@@ -82,37 +113,6 @@ void rotateMatrix(Board &matrix, int t)
         transposeMatrix(matrix);
         reverseRows(matrix);
     }
-}
-
-/**
- * @brief Returns the RGB color associated with a given tile value in the 2048 game.
- *
- * @param value The value of the tile.
- * @return A tuple containing the RGB color (red, green, blue) associated with the tile value.
- */
-std::tuple<int, int, int> getTileColor(int value)
-{
-    // Couleurs associées aux valeurs des tileules
-    std::map<int, std::tuple<int, int, int>> colorMap = {
-        {0, {189, 172, 151}},
-        {2, {238, 228, 218}},   // Beige clair
-        {4, {237, 224, 200}},   // Beige
-        {8, {242, 177, 121}},   // Orange clair
-        {16, {245, 149, 99}},   // Orange foncé
-        {32, {246, 124, 95}},   // Rouge clair
-        {64, {246, 94, 59}},    // Rouge
-        {128, {237, 207, 114}}, // Jaune
-        {256, {237, 204, 97}},  // Jaune doré
-        {512, {237, 200, 80}},  // Jaune foncé
-        {1024, {237, 197, 63}}, // Or
-        {2048, {237, 194, 46}}  // Doré brillant
-    };
-
-    if (colorMap.find(value) != colorMap.end())
-    {
-        return colorMap[value];
-    }
-    return {61, 58, 50};
 }
 
 Vect getMatrixValues(Board &board)

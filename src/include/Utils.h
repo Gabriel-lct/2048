@@ -16,6 +16,8 @@ int countDigits(int n);
 
 Vect biggestTile(Board &board);
 
+std::tuple<int, int, int> getTileColor(int value);
+
 void clearConsole();
 
 void transposeMatrix(Board &matrix);
@@ -25,8 +27,6 @@ void reverseRows(Board &matrix);
 void rotateMatrix(Board &m, int t);
 
 Vect getMatrixValues(Board &board);
-
-std::tuple<int, int, int> getTileColor(int value);
 
 int maxScoreGain(const Vect &values);
 
