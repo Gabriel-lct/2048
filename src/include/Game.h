@@ -14,6 +14,7 @@ struct GameState
 {
     int score;
     int boardSize;
+    int aiDepth;
     std::string keySetting;
 
     Board currentBoard;

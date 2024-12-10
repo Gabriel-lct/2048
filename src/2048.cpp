@@ -54,7 +54,7 @@ int run_GUI(GameState &gameState)
         }
         if (iaRunning)
         {
-            dir = findBestMove(gameState.currentBoard, gameState.score, 6, genome);
+            dir = findBestMove(gameState.currentBoard, gameState.score, gameState.aiDepth, genome);
         }
 
         slide(gameState.currentBoard, dir, gameState.score, true);
@@ -93,13 +93,13 @@ int run_CLI(GameState &gameState)
                 continue;
             }
 
-            command = findBestMove(gameState.currentBoard, gameState.score, 6, genome);
+            command = findBestMove(gameState.currentBoard, gameState.score, gameState.aiDepth, genome);
             if (command == -1)
             {
                 printw("\nGame over!\n");
                 refresh();
                 resetGame(gameState);
-                napms(1000);
+                napms(2500);
                 break;
             }
         }
@@ -180,9 +180,10 @@ int run_OPT(GameState &gameState)
 {
     clear();
     printw("Please select an option to modify:\n");
-    printw("  1. Board size\n");
-    printw("  2. Keyboard setting\n");
-    printw("  3. Return\n\n");
+    printw("    1. Board size (%dx%d)\n", gameState.boardSize, gameState.boardSize);
+    printw("    2. Keyboard setting (%s)\n", gameState.keySetting.c_str());
+    printw("    3. Ai minimax algorithm depth (%d)\n", gameState.aiDepth);
+    printw("    4. Return\n\n");
     refresh();
 
     int option;
@@ -246,30 +247,53 @@ int run_OPT(GameState &gameState)
         }
         else
         {
-            clear();
             printw("Invalid option\n");
             refresh();
-            napms(1000);
+            napms(300);
         }
         return run_OPT(gameState);
     }
     else if (option == 51)
     {
+        clear();
+        echo();
+        printw("Please enter the new AI depth: ");
+        refresh();
+        int d;
+        scanw("%d", &d);
+        noecho();
+        if (d < 1 || d > 16)
+        {
+            clear();
+            printw("Board size must be between 1 and 15.\n");
+            refresh();
+            napms(1000);
+
+            return run_OPT(gameState);
+        }
+        gameState.aiDepth = d;
+        printw("AI depth updated to %d.\n", d);
+        refresh();
+        napms(1000);
+
+        return run_OPT(gameState);
+    }
+    else if (option == 52)
+    {
         return 1;
     }
     else
     {
-        clear();
         printw("Invalid option\n");
         refresh();
-        napms(1000);
+        napms(300);
         return run_OPT(gameState);
     }
 }
 
 int main(int argc, char const *argv[])
 {
-    GameState gameState = {0, 4, "ZQSD"};
+    GameState gameState = {0, 4, 5, "ZQSD"};
     int DISPLAY_MODE;
     int running = 1;
 
@@ -287,9 +311,13 @@ int main(int argc, char const *argv[])
         initializeBoard(gameState);
 
         printw("Welcome to the 2048 Game.\n\n");
-        printw("Current board size: %dx%d\n", gameState.boardSize, gameState.boardSize);
-        printw("Current key setting: %s\n", gameState.keySetting.c_str());
-        printw("Current score: %d\n\n", gameState.score);
+
+        printw("Current game: \n");
+        printw("    - Score: %d\n", gameState.score);
+        printw("    - Board :\n");
+        displayBoard(gameState.currentBoard, 1);
+
+        printw("\n");
         printw("Please select an option:\n");
         printw("  1. CLI (Client Line Interface)\n");
         printw("  2. GUI (Game User Interface)\n");
@@ -332,10 +360,9 @@ int main(int argc, char const *argv[])
         }
         else
         {
-            clear();
             printw("Invalid option\n");
             refresh();
-            napms(1000);
+            napms(300);
         }
     }
     endwin();

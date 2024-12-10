@@ -9,7 +9,7 @@ using std::vector;
 
 void initializeColors();
 
-void displayBoard(Board &board);
+void displayBoard(Board &board, int tab = 0);
 
 std::tuple<int, int, int> getTileColor(int value);
 

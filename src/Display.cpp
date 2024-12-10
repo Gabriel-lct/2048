@@ -73,16 +73,17 @@ void initializeColors()
  * @param board A 2D vector of integers representing the game board.
  */
 
-void displayBoard(Board &board)
+void displayBoard(Board &board, int tab)
 {
     int numberOfTiles = board[0].size();
     Vect biggestTileIndex = biggestTile(board);
     int tileSpace = std::max(countDigits(board[biggestTileIndex[0]][biggestTileIndex[1]]), 5);
 
-    printw("%s\n", createLine(numberOfTiles, tileSpace).c_str());
+    std::string tabStr(tab, '\t');
+    printw("%s%s\n", tabStr.c_str(), createLine(numberOfTiles, tileSpace).c_str());
     for (const auto &line : board)
     {
-        printw("*");
+        printw("%s*", tabStr.c_str());
         for (const auto &tile : line)
         {
             int numberOfDigits = countDigits(tile);
@@ -108,7 +109,7 @@ void displayBoard(Board &board)
             printw("*");
         }
         printw("\n");
-        printw("%s\n", createLine(numberOfTiles, tileSpace).c_str());
+        printw("%s%s\n", tabStr.c_str(), createLine(numberOfTiles, tileSpace).c_str());
     }
 
     refresh(); // Refresh the screen to show changes
