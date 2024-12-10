@@ -109,27 +109,35 @@ int transformInputToCommand(std::string &keySetting, int input)
     int dir = -1;
     if (input == KEY_UP || input == MODE['U'])
     {
-        dir = 0; // Move up
+        dir = 0;
     }
     else if (input == KEY_LEFT || input == MODE['L'])
     {
-        dir = 1; // Move left
+        dir = 1;
     }
     else if (input == KEY_DOWN || input == MODE['D'])
     {
-        dir = 2; // Move down
+        dir = 2;
     }
     else if (input == KEY_RIGHT || input == MODE['R'])
     {
-        dir = 3; // Move right
+        dir = 3;
+    }
+    else if (input == 'a')
+    {
+        dir = 4;
     }
     else if (input == 'r')
     {
-        dir = 4; // Reset command or any other action
+        dir = 5;
+    }
+    else if (input == 27)
+    {
+        dir = 6;
     }
     else
     {
-        // Check if input matches any key in MODE
+
         auto it = MODE.find(input);
         if (it != MODE.end())
         {

@@ -83,7 +83,7 @@ int run_CLI(GameState &gameState)
         displayBoard(gameState.currentBoard);
         refresh();
 
-        int direction;
+        int command;
         if (isIaRunning)
         {
             // Check if 'a' is pressed to stop the AI
@@ -93,24 +93,26 @@ int run_CLI(GameState &gameState)
                 continue;
             }
 
-            direction = findBestMove(gameState.currentBoard, gameState.score, 6, genome);
-            if (direction == -1)
+            command = findBestMove(gameState.currentBoard, gameState.score, 6, genome);
+            if (command == -1)
             {
                 printw("\nGame over!\n");
                 refresh();
+                resetGame(gameState);
+                napms(1000);
                 break;
             }
         }
         else
         {
             int input = takeInput();
-            direction = transformInputToCommand(gameState.keySetting, input);
-            if (direction == 4)
+            command = transformInputToCommand(gameState.keySetting, input);
+            if (command == 4)
             {
                 isIaRunning = !isIaRunning;
                 continue;
             }
-            else if (direction == 5)
+            else if (command == 5)
             {
                 printw("\nAre you sure you want to reset your game? [y/n]  ");
                 refresh();
@@ -127,13 +129,13 @@ int run_CLI(GameState &gameState)
                 }
                 continue;
             }
-            else if (direction == 6)
+            else if (command == 6)
             {
                 return 1;
             }
         }
 
-        if (direction == -1)
+        if (command == -1)
         {
             clear();
             printw("Invalid command\n");
@@ -142,7 +144,7 @@ int run_CLI(GameState &gameState)
         }
         else
         {
-            slide(gameState.currentBoard, direction, gameState.score, true);
+            slide(gameState.currentBoard, command, gameState.score, true);
         }
 
         if (isGameOver(gameState.currentBoard))
@@ -159,7 +161,9 @@ int run_CLI(GameState &gameState)
 
 int run_GA()
 {
-    std::cout << "Running genetic algorithm..." << std::endl;
+    clear();
+    printw("Running Genetic Algorithm\n");
+    refresh();
     VectDouble genome = {1.05984, 0.159454, 0.115378, 0.636072, 2.69887}; //{1.51422, 0.173924, 1.4986, 1.04476, 0.243911};
     int populationSize = 50;
     int maxGamesPerGenome = 10;
@@ -170,7 +174,7 @@ int run_GA()
     BoardDouble firstPopulation = initializePopulationFromGenome(genome, populationSize, mutationRate);
 
     runGeneticAlgorithm(firstPopulation, maxGamesPerGenome, maxGenerations, mutationRate, mutationStrength);
-    return 0;
+    return 1;
 }
 
 int run_OPT(GameState &gameState)

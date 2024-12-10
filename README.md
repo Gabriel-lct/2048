@@ -29,43 +29,6 @@ sudo apt update
 sudo apt install METTRE DEPENDANCES
 ```
 
-## Résumé du travail effectué
-
-:::{admonition} Consignes
-
-Pour les questions «Aller plus loin» plus ouvertes, décrivez plus en
-détail ce que vous avez choisi de réaliser. Précisez les difficultés
-rencontrées, les choix d'implantation que vous avez fait, etc.
-
-En plus du rapport, la documentation de chaque fonction dans le code
-devra préciser son auteur et votre degré de confiance dans
-l'implantation, ainsi que les éléments factuels motivant cette
-confiance: présence de tests, bogues et limitations connus, etc.
-
-:::
-
-- Niveau 0 : 
-  - Structure du jeu : réalisée, documentée, testée
-  - Compilation des fichiers : réalisée, documentée, testée
-  - Fonctionnalité du jeu : réalisée, documentée, testée
-  - Respect des règles : réalisée, documentée, testée
-  - Mise à jour du score : réalisée, documentée, testée
-  - Alignement des colonnes : réalisée, documentée, testée.
-
-- Niveau 1 : 
-  - Couleur console : réalisée, documentée, testée. Pas de difficultés particulières rencontrées.
-  - Flèches clavier : réalisée, documentée, testée. Pas de difficultés particulières rencontrées.
-  - Rafraîchissement écran : réalisée, documentée, testée. Pas de difficultés particulières rencontrées.
-  - Structure score : non réalisée
-- Niveau 2 : 
-  - Makefile : réalisée, document��e, testée. Un peu de recherche sur internet aura permis de créer le MakeFile.
-  - Gestionnaire de version : réalisée, documentée, testée. Aucune difficulté, le projet est disponible sur GitHub.
-- Niveau 3 : 
-  - IA : réalisée, documentée, testée. Voir section IA.
-  - Variante (taille grille) : réalisée, documentée, testée.  Pas de difficultés particulières rencontrées.
-  - SDL Integration : réalisée, documentée, testée. Voir section SDL.
-  - Application : ahah, non.
-
 ## Démonstration
 
 Notez comment on lance une commande shell en la préfixant d'un point
@@ -98,7 +61,7 @@ suivi des propositions suivantes :
 
 ```
 Please select an option:
-  1. CLI (Client L... Interface)
+  1. CLI (Client Line Interface)
   2. GUI (Game User Interface)
   3. GA (Genetic Algorithm)
   4. OPTIONS
@@ -121,15 +84,15 @@ Les options sont détaillées ci-dessous :
 
 ### CLI -  Mode console
 
-Pour lancer une partie en mode console, il suffit de taper `1` puis `Entrée`. Pour jouer, voir les commandes ci-dessous.
+Pour lancer une partie en mode console, il suffit de taper `1`. Pour jouer, voir les commandes ci-dessous.
 
 ### GUI - Mode Graphique
 
-Pour lancer une partie en mode graphique, il suffit de taper `2` puis `Entrée`. Pour jouer, voir les commandes ci-dessous.
+Pour lancer une partie en mode graphique, il suffit de taper `2`. Pour jouer, voir les commandes ci-dessous.
 
 ### GA - Algorithme génétique
 
-Pour lancer l'algorithme génétique, il suffit de taper `3` puis `Entrée`.
+Pour lancer l'algorithme génétique, il suffit de taper `3`.
 
 ### Commandes
 | Touche | Action |
@@ -146,23 +109,52 @@ Pour lancer l'algorithme génétique, il suffit de taper `3` puis `Entrée`.
 
 | Option | Description |
 | --- | --- |
-| `Board Size` | Changer la taille de la grille de jeu. |
+| `Board Size` | Changer la taille de la grille de jeu (entre 2 et 20). |
 | `Key Setting` | Sélectionner la disposition du clavier (ZQSD ou WASD). |
+
+## Résumé du travail effectué
+
+:::{admonition} Consignes
+
+Pour les questions «Aller plus loin» plus ouvertes, décrivez plus en
+détail ce que vous avez choisi de réaliser. Précisez les difficultés
+rencontrées, les choix d'implantation que vous avez fait, etc.
+
+En plus du rapport, la documentation de chaque fonction dans le code
+devra préciser son auteur et votre degré de confiance dans
+l'implantation, ainsi que les éléments factuels motivant cette
+confiance: présence de tests, bogues et limitations connus, etc.
+
+:::
+
+- Niveau 0 : 
+  - Structure du jeu : réalisée et documentée.
+  - Compilation des fichiers : réalisée et documentée.
+  - Fonctionnalité du jeu : réalisée et documentée.
+  - Respect des règles : réalisée et documentée.
+  - Mise à jour du score : réalisée et documentée.
+  - Alignement des colonnes : réalisée et documentée.
+
+- Niveau 1 : 
+  - Couleur console : réalisée et documentée. Pas de difficultés particulières rencontrées.
+  - Flèches clavier : réalisée et documentée. Pas de difficultés particulières rencontrées.
+  - Rafraîchissement écran : réalisée et documentée. Pas de difficultés particulières rencontrées.
+  - Structure score : réalisée et documentée. Pas de difficultés particulières rencontrées.
+- Niveau 2 : 
+  - Makefile : réalisée et documentée. Un peu de recherche sur internet aura permis de créer le MakeFile.
+  - Gestionnaire de version : réalisée et documentée. Aucune difficulté, le projet est disponible sur GitHub.
+- Niveau 3 : 
+  - IA : réalisée et documentée. Voir section IA.
+  - Variante (taille grille) : réalisée et documentée.  Pas de difficultés particulières rencontrées.
+  - SDL Integration : réalisée et documentée. Voir section SDL.
+  - Application : ahah, non.
 
 
 ## Organisation du travail
 
-:::{admonition} Consignes
-Décrivez en quelques phrases comment vous vous êtes organisés pour
-travailler sur le projet: nombre d'heures consacrées au projet,
-répartition du travail dans le binôme, moyens mis en œuvre pour
-collaborer, etc. Si vous avez bénéficié d'aide (en dehors de celle de
-vos enseigants), précisez le.
-:::
-
 Pour ce projet, nous avons adopté une organisation assez simple mais efficace. Chacun travaillait de son côté, en se concentrant sur des aspects précis du projet. Nous avons utilisé GitHub pour centraliser et synchroniser notre travail.
 
-Luca s’est principalement chargé de la logique interne du jeu, assurant que les règles soient bien respectées et que le comportement général soit fluide. Il a également travaillé sur l’affichage SDL pour rendre le jeu agréable visuellement. De son côté, Gabriel s’est concentré sur l’affichage en mode terminal, pour avoir une version simplifiée mais fonctionnelle du jeu. En plus de cela, il a conçu une IA capable de jouer automatiquement ainsi qu'un algorithme génétique qui permet l'optimisation de la détermination des poids utilisés dans par la fonction de récompense de l'IA. 
+Luca s’est principalement chargé de la logique interne du jeu, assurant que les règles soient bien respectées et que le comportement général soit fluide. Il a également travaillé sur l’affichage SDL pour rendre le jeu agréable visuellement. De son côté, Gabriel s’est concentré sur l’affichage en mode terminal, pour avoir une version simplifiée mais fonctionnelle du jeu. En plus de cela, il a conçu une IA capable de jouer automatiquement ainsi qu'un algorithme génétique qui permet l'optimisation de la détermination des poids utilisés dans par la fonction de récompense de l'IA.
 
 
 Nous avons consacré environ trente heures chacun à ce projet, réparties sur plusieurs semaines, souvent en soirée ou durant nos temps libres. Bien que nous ayons principalement travaillé de manière autonome, nous avons aussi échangé régulièrement pour discuter de nos idées, ajuster nos priorités et résoudre des problèmes ensemble.
