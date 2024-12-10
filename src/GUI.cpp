@@ -134,23 +134,30 @@ int handleEvents(bool &running, Board board)
         case SDL_KEYDOWN:
             switch (event.key.keysym.scancode)
             {
-            case SDL_SCANCODE_DOWN: case SDL_SCANCODE_S:
+            case SDL_SCANCODE_DOWN:
+            case SDL_SCANCODE_S:
                 return 2;
                 break;
-            case SDL_SCANCODE_UP: case SDL_SCANCODE_W:
+            case SDL_SCANCODE_UP:
+            case SDL_SCANCODE_W:
                 return 0;
                 break;
-            case SDL_SCANCODE_LEFT: case SDL_SCANCODE_A:
+            case SDL_SCANCODE_LEFT:
+            case SDL_SCANCODE_A:
                 return 1;
                 break;
-            case SDL_SCANCODE_RIGHT: case SDL_SCANCODE_D:
+            case SDL_SCANCODE_RIGHT:
+            case SDL_SCANCODE_D:
                 return 3;
                 break;
             case SDL_SCANCODE_Q:
                 return 4;
                 break;
-            case SDL_SCANCODE_ESCAPE:
+            case SDL_SCANCODE_R:
                 return 5;
+                break;
+            case SDL_SCANCODE_ESCAPE:
+                return 6;
                 break;
             default:
                 break;

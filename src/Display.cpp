@@ -29,7 +29,7 @@ std::string createLine(int numberOfTiles, int tileSpace)
  * @param board A 2D vector of integers representing the game board.
  */
 
-void displayBoard(vector<vector<int>> board)
+void displayBoard(Board &board)
 {
     int numberOfTiles = board[0].size();
     Vect biggestTileIndex = biggestTile(board);

@@ -6,8 +6,6 @@
 #include <iostream>
 #include <time.h>
 
-std::map<char, int> MODE = ZQSD;
-
 /**
  * @brief Spawns a new tile on the board.
  *
@@ -69,6 +67,32 @@ Board genBoard(int N, int M)
 }
 
 /**
+ * @brief Initializes the game board.
+ *
+ * @param currentBoard Reference to the current game board.
+ * @param boardSize The desired size of the board.
+ * @param score Reference to the current score.
+ */
+void initializeBoard(GameState &gameState)
+{
+    if (static_cast<int>(gameState.currentBoard.size()) != gameState.boardSize)
+    {
+        resetGame(gameState);
+    }
+}
+
+/**
+ * @brief Resets the game state to its initial configuration.
+ *
+ * @param gameState A reference to the GameState object that holds the current game state.
+ */
+void resetGame(GameState &gameState)
+{
+    gameState.currentBoard = genBoard(gameState.boardSize, gameState.boardSize);
+    gameState.score = 0;
+}
+
+/**
  * @brief Takes input from the player.
  *
  * This function takes a command from the player and assings an integer value,
@@ -78,21 +102,55 @@ Board genBoard(int N, int M)
  * @return int The largest element in the board.
  */
 
-int takeInput()
+int takeInput(std::string &keySetting)
 {
-    std::string i;
-    std::cout << "Entrer commande: ";
-    std::cin >> i;
-    std::cout << std::endl;
-    if(i == "x")
+    std::map<char, int> MODE = WASD;
+    if (keySetting == "ZQSD")
     {
-        std::cout << "Vous avez perdu. #looser. Tu es sombre merde" << std::endl;
-        return 5;
+        MODE = ZQSD;
     }
+
+    initscr();
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE);
+
+    int ch;
+    ch = getch();
+
+    endwin();
+
     int dir;
     try
     {
-        dir = MODE.at(i[0]);
+        if (ch == KEY_UP)
+        {
+            dir = 0;
+        }
+        else if (ch == KEY_LEFT)
+        {
+            dir = 1;
+        }
+        else if (ch == KEY_DOWN)
+        {
+            dir = 2;
+        }
+        else if (ch == KEY_RIGHT)
+        {
+            dir = 3;
+        }
+        else if (ch == 'r') // restart game
+        {
+            dir = 5;
+        }
+        else if (ch == 27)
+        {
+            dir = 6;
+        }
+        else
+        {
+            dir = MODE.at(ch);
+        }
     }
     catch (const std::exception &e)
     {

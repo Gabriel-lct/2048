@@ -1,15 +1,3 @@
-a---
-jupytext:
-  text_representation:
-    extension: .md
-    format_name: myst
-    format_version: 0.13
-kernelspec:
-  display_name: Python 3 (ipykernel)
-  language: python
-  name: python3
----
-
 # Rapport de projet 2048
 
 ## Auteurs
@@ -70,7 +58,7 @@ confiance: présence de tests, bogues et limitations connus, etc.
   - Rafraîchissement écran : réalisée, documentée, testée. Pas de difficultés particulières rencontrées.
   - Structure score : non réalisée
 - Niveau 2 : 
-  - Makefile : réalisée, documentée, testée. Un peu de recherche sur internet aura permis de créer le MakeFile.
+  - Makefile : réalisée, document��e, testée. Un peu de recherche sur internet aura permis de créer le MakeFile.
   - Gestionnaire de version : réalisée, documentée, testée. Aucune difficulté, le projet est disponible sur GitHub.
 - Niveau 3 : 
   - IA : réalisée, documentée, testée. Voir section IA.
@@ -96,14 +84,40 @@ Vous pourrez alors lancer le jeu depuis un terminal avec :
 ```
 ./2048
 ```
-Dans le terminal, s'affiche alors les propositions suivantes :
+Dans le terminal, s'affiche alors les informations suivantes :
+
+```	
+Welcome to the 2048 Game.
+
+Current board size: 4x4
+Current key setting: ZQSD
+Current score : 0
+```
+
+suivi des propositions suivantes :
+
+```
+Please select an option:
+  1. CLI (Client L... Interface)
+  2. GUI (Game User Interface)
+  3. GA (Genetic Algorithm)
+  4. OPTIONS
+  5. RESET
+  6. QUIT
+
+Your option:
+```
+
+Les options sont détaillées ci-dessous :
 
 | Option | Acronyme | Description |
 | --- | --- | --- |
 | `1` | CLI | Lance le jeu en mode console. |
 | `2` | GUI | Lance le jeu en mode graphique. |
 | `3` | GA | Lance l'algorithme génétique. |
-| `4` | OPT | Affiche les options disponibles. |
+| `4` | OPTIONS | Affiche les options disponibles. |
+| `5` | RESET | Réinitialise le jeu. |
+| `6` | QUIT | Quitte le jeu. |
 
 ### CLI -  Mode console
 
@@ -120,13 +134,21 @@ Pour lancer l'algorithme génétique, il suffit de taper `3` puis `Entrée`.
 ### Commandes
 | Touche | Action |
 | --- | --- |
-| `q`, `flèche gauche` | Déplacer les tuiles vers la gauche. |
-| `d`, `flèche droite` | Déplacer les tuiles vers la droite. |
-| `z`, `flèche haut` | Déplacer les tuiles vers le haut. |
-| `s`, `flèche bas` | Déplacer les tuiles vers le bas. |
+| `q/w`, `flèche gauche` | Déplacer les tuiles vers la gauche. |
+| `d/a`, `flèche droite` | Déplacer les tuiles vers la droite. |
+| `z/s`, `flèche haut` | Déplacer les tuiles vers le haut. |
+| `s/d`, `flèche bas` | Déplacer les tuiles vers le bas. |
 | `a` | Lancer/arrêter l'IA. |
 | `r` | Recommencer la partie. |
-| `Echap` | Quitter le jeu. |
+| `Echap` | Revenir au menu. |
+
+### Options
+
+| Option | Description |
+| --- | --- |
+| `Board Size` | Changer la taille de la grille de jeu. |
+| `Key Setting` | Sélectionner la disposition du clavier (ZQSD ou WASD). |
+
 
 ## Organisation du travail
 

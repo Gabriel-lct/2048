@@ -2,11 +2,11 @@
 #define DISPLAY_H
 
 #include <vector>
-using Board = std::vector<std::vector<int>>;
 
+using Board = std::vector<std::vector<int>>;
 using std::vector;
 
-void displayBoard(Board);
+void displayBoard(Board &board);
 
 class Display
 {

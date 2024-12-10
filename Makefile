@@ -7,7 +7,7 @@ SRC = ./src/2048.cpp ./src/Display.cpp ./src/Utils.cpp ./src/Game.cpp ./src/AI.c
 # Le compilateur et les options
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -fopenmp # Include SDL2 headers
-LDFLAGS = -lSDL2 -lSDL2_ttf # Link SDL2 and SDL2_ttf libraries
+LDFLAGS = -lSDL2 -lSDL2_ttf -lncurses # Link SDL2 and SDL2_ttf libraries
 
 # Dossier de sortie
 OUT_DIR = .

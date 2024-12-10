@@ -6,12 +6,26 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <ncurses.h>
 
 using Board = std::vector<std::vector<int>>;
 
+struct GameState
+{
+    int score;
+    int boardSize;
+    std::string keySetting;
+
+    Board currentBoard;
+};
+
 Board genBoard(int N, int M);
 
-int takeInput();
+void initializeBoard(GameState &gameState);
+
+void resetGame(GameState &gameState);
+
+int takeInput(std::string &keySetting);
 
 void move(Board &p, int &c);
 void fuse(Board &p, int &c, int &s);
@@ -25,9 +39,6 @@ bool isGameOver(Board &board);
 // u l d r
 const std::map<char, int>
     WASD = {{'w', 0}, {'a', 1}, {'s', 2}, {'d', 3}, {'q', 4}};
-
 const std::map<char, int> ZQSD = {{'z', 0}, {'q', 1}, {'s', 2}, {'d', 3}, {'a', 4}};
-const std::map<char, int> FR = {{'h', 0}, {'d', 1}, {'b', 2}, {'g', 3}, {'a', 4}};
-const std::map<char, int> EN = {{'u', 0}, {'l', 1}, {'d', 2}, {'r', 3}, {'a', 4}};
 
 #endif
