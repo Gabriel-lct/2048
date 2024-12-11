@@ -39,7 +39,7 @@ bool boardExists(const BoardVect &boardVect, const Board &board)
 
 std::pair<double, int> minimax(Board board, int oldScore, int score, const VectDouble &genome, int depth, double alpha, double beta, bool isMaximizingPlayer)
 {
-    if (depth == 0 || isGameOver(board))
+    if (depth == 0)// || isGameOver(board))
     {
         return {evaluateBoard(board, oldScore, score, genome), -1};
     }
@@ -157,11 +157,6 @@ double evaluateBoard(Board &board, int &oldScore, int &score, const VectDouble &
     Vect::size_type maxY = biggestIndex[1];
 
     bool inCorner = false;
-
-     if (isGameOver(board))
-    {
-        return -std::numeric_limits<double>::max();
-    }
 
     //if ((maxX == 0 && (maxY == 0 || maxY == board[maxX].size() - 1)) || (maxX == board.size() - 1 && (maxY == 0 || maxY == board[maxX].size() - 1)))
     if (maxX==0 && maxY==0)

@@ -28,7 +28,7 @@ void initSDL(SDL_Window *&window, SDL_Renderer *&renderer, TTF_Font *&font, int 
     H = height;
     SDL_Init(SDL_INIT_EVERYTHING);
     TTF_Init();
-    window = SDL_CreateWindow("2048", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, W, H, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+    window = SDL_CreateWindow("2048", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, W, H, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_MAXIMIZED );
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     font = TTF_OpenFont("./fonts/ClearSans/ClearSans-Bold.ttf", W);
     if (!font)
@@ -114,6 +114,22 @@ void renderScore(int score, SDL_Renderer *&renderer, TTF_Font *&font)
     textWidth = (textWidth * W / 10) / (2 * maxDim);
     textHeight = (textHeight * H / 10) / (2 * maxDim);
     SDL_Rect destRect = {0, 0, textWidth, textHeight};
+
+    SDL_RenderCopy(renderer, textTexture, nullptr, &destRect);
+
+    SDL_DestroyTexture(textTexture);
+}
+
+void renderGameOver(SDL_Renderer *&renderer, TTF_Font *&font)
+{
+    SDL_Color red = {255, 0, 0, 255};
+    SDL_Texture *textTexture = getTextTexture("GAME OVER", font, red, renderer);
+    int textWidth, textHeight;
+    SDL_QueryTexture(textTexture, nullptr, nullptr, &textWidth, &textHeight);
+    int maxDim = std::max(textHeight, textWidth);
+    textWidth = (textWidth * W*2) / (2 * maxDim);
+    textHeight = (textHeight * H*2) / (2 * maxDim);
+    SDL_Rect destRect = {W/2 - textWidth/2, H/2 - textHeight/2, textWidth, textHeight};
 
     SDL_RenderCopy(renderer, textTexture, nullptr, &destRect);
 

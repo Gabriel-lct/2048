@@ -35,6 +35,13 @@ int run_GUI(GameState &gameState)
 
         renderBoard(gameState.currentBoard, renderer, font, window);
         renderScore(gameState.score, renderer, font);
+
+        if (isGameOver(gameState.currentBoard))
+        {
+            renderGameOver(renderer, font);
+            running = false;
+        }
+
         SDL_RenderPresent(renderer);
         int dir = handleEvents(running, gameState.currentBoard);
 
@@ -63,12 +70,12 @@ int run_GUI(GameState &gameState)
         if (frameTime < frameDelay)
         {
             SDL_Delay(frameDelay - frameTime);
-        } // TODO - Check if board is dead.
+        }
     }
-
+    napms(5000);
     // Clean up SDL resources
     terminateGUI(window, renderer, font);
-    return 0;
+    return 1;
 }
 
 int run_CLI(GameState &gameState)
@@ -316,6 +323,11 @@ int main(int argc, char const *argv[])
         printw("    - Score: %d\n", gameState.score);
         printw("    - Board :\n");
         displayBoard(gameState.currentBoard, 1);
+
+        if (isGameOver(gameState.currentBoard))
+        {
+            printw("\nGame over! (Enter 6 to reset)\n");
+        }
 
         printw("\n");
         printw("Please select an option:\n");
