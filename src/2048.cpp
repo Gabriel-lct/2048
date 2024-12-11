@@ -66,11 +66,11 @@ int run_GUI(GameState &gameState)
 
         slide(gameState.currentBoard, dir, gameState.score, true);
 
-        frameTime = SDL_GetTicks() - frameStart;
+        /*frameTime = SDL_GetTicks() - frameStart;
         if (frameTime < frameDelay)
         {
             SDL_Delay(frameDelay - frameTime);
-        }
+        }*/
     }
     napms(5000);
     // Clean up SDL resources

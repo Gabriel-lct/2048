@@ -10,7 +10,8 @@
  *
  * @param numberOfTiles The number of tiles to be included in the line. Each tile
  *                      is separated by a single asterisk. Default is 4.
- * @param tileSpace The number of asterisks in each tile. Default is 5.
+ * @param tileSpace The
+ *  number of asterisks in each tile. Default is 5.
  * @return std::string The generated line of asterisks.
  */
 

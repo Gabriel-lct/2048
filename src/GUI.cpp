@@ -28,7 +28,7 @@ void initSDL(SDL_Window *&window, SDL_Renderer *&renderer, TTF_Font *&font, int 
     H = height;
     SDL_Init(SDL_INIT_EVERYTHING);
     TTF_Init();
-    window = SDL_CreateWindow("2048", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, W, H, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_MAXIMIZED );
+    window = SDL_CreateWindow("2048", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, W, H, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_MAXIMIZED | SDL_WINDOW_OPENGL);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     font = TTF_OpenFont("./fonts/ClearSans/ClearSans-Bold.ttf", W);
     if (!font)
