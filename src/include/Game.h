@@ -26,6 +26,7 @@ struct GameState
  * @param N The number of rows.
  * @param M The number of columns.
  * @return The generated game board.
+ * @author Luca Bozzi Menéndez
  */
 Board genBoard(int N, int M);
 
@@ -33,6 +34,7 @@ Board genBoard(int N, int M);
  * @brief Initializes the game board for a new game.
  * 
  * @param gameState The current game state.
+ * @author Gabriel Lancelot
  */
 void initializeBoard(GameState &gameState);
 
@@ -40,6 +42,7 @@ void initializeBoard(GameState &gameState);
  * @brief Resets the game to its initial state.
  * 
  * @param gameState The current game state.
+ * @author Gabriel Lancelot
  */
 void resetGame(GameState &gameState);
 
@@ -47,6 +50,7 @@ void resetGame(GameState &gameState);
  * @brief Takes input from the user.
  * 
  * @return The input taken from the user.
+ * 
  */
 int takeInput();
 

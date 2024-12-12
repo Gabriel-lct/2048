@@ -16,6 +16,7 @@ using Board = std::vector<std::vector<int>>;
  * @param font Reference to the TTF_Font pointer that will be loaded.
  * @param width The width of the window to be created.
  * @param height The height of the window to be created.
+ * @author Luca Bozzi Menéndez
  */
 void initSDL(SDL_Window* &window, SDL_Renderer* &renderer, TTF_Font* &font, int width, int height);
 
@@ -29,6 +30,7 @@ void initSDL(SDL_Window* &window, SDL_Renderer* &renderer, TTF_Font* &font, int 
  * @param renderer Reference to the SDL_Renderer used for rendering the board.
  * @param font Pointer to the TTF_Font used for rendering text on the board.
  * @param window Pointer to the SDL_Window where the board will be displayed.
+ * @author Luca Bozzi Menéndez
  */
 void renderBoard(Board &board, SDL_Renderer* &renderer, TTF_Font* &font, SDL_Window* &window);
 
@@ -41,6 +43,7 @@ void renderBoard(Board &board, SDL_Renderer* &renderer, TTF_Font* &font, SDL_Win
  * @param score The current score to be rendered.
  * @param renderer A reference to the SDL_Renderer used for rendering.
  * @param font A reference to the TTF_Font used for rendering the text.
+ * @author Luca Bozzi Menéndez
  */
 void renderScore(int score, SDL_Renderer* &renderer, TTF_Font *&font);
 
@@ -51,6 +54,7 @@ void renderScore(int score, SDL_Renderer* &renderer, TTF_Font *&font);
  * 
  * @param renderer A reference to the SDL_Renderer used for rendering.
  * @param font A reference to the TTF_Font used for rendering text.
+ * @author Luca Bozzi Menéndez
  */
 void renderGameOver(SDL_Renderer *&renderer, TTF_Font *&font);
 
@@ -63,6 +67,7 @@ void renderGameOver(SDL_Renderer *&renderer, TTF_Font *&font);
  * @param running A reference to a boolean that indicates whether the game is running.
  * @param board The current state of the game board.
  * @return An integer representing the status after handling events.
+ * @author Luca Bozzi Menéndez
  */
 int handleEvents(bool &running, Board board);
 
@@ -76,6 +81,7 @@ int handleEvents(bool &running, Board board);
  * @param window Reference to the pointer of the SDL_Window to be destroyed.
  * @param renderer Reference to the pointer of the SDL_Renderer to be destroyed.
  * @param font Reference to the pointer of the TTF_Font to be closed.
+ * @author Luca Bozzi Menéndez
  */
 void terminateGUI(SDL_Window* &window, SDL_Renderer* &renderer, TTF_Font* &font);
 
