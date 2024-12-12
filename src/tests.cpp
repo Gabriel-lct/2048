@@ -6,7 +6,8 @@
 #include "AI.h"
 #include <cassert>
 
-void testUtils() {
+void testUtils()
+{
     // Test countDigits
     assert(countDigits(12345) == 5);
     assert(countDigits(0) == 1);
@@ -24,7 +25,7 @@ void testUtils() {
     clearConsole();
 
     // Test transposeMatrix
-    Board matrix = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+    Board matrix = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
     transposeMatrix(matrix);
     assert(matrix[0][1] == 4);
 
@@ -58,7 +59,8 @@ void testUtils() {
     kbhit();
 }
 
-int main() {
+int main()
+{
     testUtils();
     std::cout << "All tests passed!" << std::endl;
     return 0;

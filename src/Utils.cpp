@@ -56,7 +56,7 @@ std::tuple<int, int, int> getTileColor(int value)
 {
     // Couleurs associées aux valeurs des tileules
     std::map<int, std::tuple<int, int, int>> colorMap = {
-        {0, {192, 192, 192}},
+        {0, {189, 172, 151}},
         {2, {238, 228, 218}},   // Beige clair
         {4, {237, 224, 200}},   // Beige
         {8, {242, 177, 121}},   // Orange clair

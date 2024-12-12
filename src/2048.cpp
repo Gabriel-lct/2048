@@ -16,8 +16,8 @@ VectDouble genome = {10, 5, 0, 2, 10};
 
 int run_GUI(GameState &gameState)
 {
-    const int FPS = 60;
-    const int frameDelay = 1000 / FPS;
+    // const int FPS = 60;
+    // const int frameDelay = 1000 / FPS;
 
     VectDouble genome = {10, 5, 0, 2, 10};
 
@@ -28,10 +28,10 @@ int run_GUI(GameState &gameState)
     initSDL(window, renderer, font, 600, 600);
     bool running = true;
     bool iaRunning = false;
-    Uint32 frameStart, frameTime;
+    // Uint32 frameStart, frameTime;
     while (running)
     {
-        frameStart = SDL_GetTicks();
+        // frameStart = SDL_GetTicks();
 
         renderBoard(gameState.currentBoard, renderer, font, window);
         renderScore(gameState.score, renderer, font);
