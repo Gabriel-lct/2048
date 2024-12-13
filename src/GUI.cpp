@@ -30,7 +30,7 @@ void initSDL(SDL_Window *&window, SDL_Renderer *&renderer, TTF_Font *&font, int 
     TTF_Init();
     window = SDL_CreateWindow("2048", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, W, H, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_MAXIMIZED | SDL_WINDOW_OPENGL);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    font = TTF_OpenFont("./fonts/ClearSans/ClearSans-Bold.ttf", W);
+    font = TTF_OpenFont("./fonts/ClearSans-Bold.ttf", W);
     if (!font)
     {
         std::cerr << "TTF_OpenFont Error: " << TTF_GetError() << std::endl;
@@ -127,9 +127,9 @@ void renderGameOver(SDL_Renderer *&renderer, TTF_Font *&font)
     int textWidth, textHeight;
     SDL_QueryTexture(textTexture, nullptr, nullptr, &textWidth, &textHeight);
     int maxDim = std::max(textHeight, textWidth);
-    textWidth = (textWidth * W*2) / (2 * maxDim);
-    textHeight = (textHeight * H*2) / (2 * maxDim);
-    SDL_Rect destRect = {W/2 - textWidth/2, H/2 - textHeight/2, textWidth, textHeight};
+    textWidth = (textWidth * W * 2) / (2 * maxDim);
+    textHeight = (textHeight * H * 2) / (2 * maxDim);
+    SDL_Rect destRect = {W / 2 - textWidth / 2, H / 2 - textHeight / 2, textWidth, textHeight};
 
     SDL_RenderCopy(renderer, textTexture, nullptr, &destRect);
 

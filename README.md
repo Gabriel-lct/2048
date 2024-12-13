@@ -19,8 +19,8 @@ Avant de commencer, assurez-vous d'avoir les éléments suivants installés :
 ### Étape 1 : Cloner le dépôt
 Clonez le dépôt Git contenant le projet :
 ```bash
-git clone <URL_DU_DEPOT>
-cd <NOM_DU_DOSSIER>
+git clone https://github.com/Gabriel-lct/2048.git
+cd 2048
 ```
 
 ### Étape 2 : Installer les dépendances
