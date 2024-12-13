@@ -105,7 +105,6 @@ int run_CLI(GameState &gameState)
             {
                 printw("\nGame over!\n");
                 refresh();
-                // resetGame(gameState);
                 napms(2500);
                 return 1;
             }
@@ -170,9 +169,9 @@ int run_GA()
     clear();
     printw("Running Genetic Algorithm\n");
     refresh();
-    VectDouble genome = {1.05984, 0.159454, 0.115378, 0.636072, 2.69887}; //{1.51422, 0.173924, 1.4986, 1.04476, 0.243911};
-    int populationSize = 50;
-    int maxGamesPerGenome = 10;
+    VectDouble genome = {1.05984, 0.159454, 0.115378, 0.636072, 2.69887};
+    int populationSize = 5;
+    int maxGamesPerGenome = 2;
     int maxGenerations = 20;
     double mutationRate = 0.1;
     double mutationStrength = 0.1;
