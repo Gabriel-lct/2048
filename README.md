@@ -101,7 +101,7 @@ Pour lancer l'algorithme génétique, il suffit de taper `3`.
 | `d/a`, `flèche droite` | Déplacer les tuiles vers la droite. |
 | `z/s`, `flèche haut` | Déplacer les tuiles vers le haut. |
 | `s/d`, `flèche bas` | Déplacer les tuiles vers le bas. |
-| `a` | Lancer/arrêter l'IA. |
+| `i` | Lancer/arrêter l'IA. |
 | `r` | Recommencer la partie. |
 | `Echap` | Revenir au menu. |
 

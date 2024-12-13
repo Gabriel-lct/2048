@@ -94,18 +94,18 @@ int run_CLI(GameState &gameState)
         if (isIaRunning)
         {
             // Check if 'a' is pressed to stop the AI
-            if (kbhit() && getchar() == 'a')
+            if (kbhit() && getchar() == 'i')
             {
                 isIaRunning = !isIaRunning;
                 continue;
             }
 
             command = findBestMove(gameState.currentBoard, gameState.score, gameState.aiDepth, genome);
-            if (command == -1)
+            if (command == -1 && isGameOver(gameState.currentBoard))
             {
                 printw("\nGame over!\n");
                 refresh();
-                resetGame(gameState);
+                // resetGame(gameState);
                 napms(2500);
                 return 1;
             }

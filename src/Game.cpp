@@ -101,6 +101,7 @@ int takeInput()
 int transformInputToCommand(std::string &keySetting, int input)
 {
     std::map<char, int> MODE = WASD;
+
     if (keySetting == "ZQSD")
     {
         MODE = ZQSD;
@@ -123,7 +124,7 @@ int transformInputToCommand(std::string &keySetting, int input)
     {
         dir = 3;
     }
-    else if (input == 'a')
+    else if (input == 'i')
     {
         dir = 4;
     }

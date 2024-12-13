@@ -166,7 +166,7 @@ int handleEvents(bool &running, Board board)
             case SDL_SCANCODE_D:
                 return 3;
                 break;
-            case SDL_SCANCODE_Q:
+            case SDL_SCANCODE_I:
                 return 4;
                 break;
             case SDL_SCANCODE_R:
